@@ -1,0 +1,26 @@
+GET http://localhost:3000 HTTP/1.1
+###
+
+GET https://localhost:3000/test HTTP/1.1
+###
+
+GET https://localhost:3000/api/orders HTTP/1.1
+###
+
+GET https://localhost:3000 HTTP/1.1
+###
+
+GET https://localhost:3000/api/fruits HTTP/1.1
+
+###
+POST https://localhost:3000/api/fruits HTTP/1.1
+content-type: application/json
+
+{
+    "id": "4",
+    "name": "Pineapple"
+}
+###
+
+DELETE https://localhost:3000/api/fruits/66fc3b74c4ec4bba7f89a645 HTTP/1.1 
+###

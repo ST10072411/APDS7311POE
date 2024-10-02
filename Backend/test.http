@@ -17,10 +17,10 @@ POST https://localhost:3000/api/fruits HTTP/1.1
 content-type: application/json
 
 {
-    "id": "4",
-    "name": "Pineapple"
+    "id": "6",
+    "name": "Nuts?"
 }
 ###
-
+//
 DELETE https://localhost:3000/api/fruits/66fc3b74c4ec4bba7f89a645 HTTP/1.1 
 ###

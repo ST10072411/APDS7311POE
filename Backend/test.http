@@ -17,10 +17,38 @@ POST https://localhost:3000/api/fruits HTTP/1.1
 content-type: application/json
 
 {
-    "id": "6",
-    "name": "Nuts?"
+    "id": "7",
+    "name": "Tomato"
 }
 ###
 //
 DELETE https://localhost:3000/api/fruits/66fc3b74c4ec4bba7f89a645 HTTP/1.1 
+###
+
+POST https://localhost:3000/api/users/signup HTTP/1.1
+Content-Type: application/json
+
+{
+    "username" : "testUser",
+    "password" : "theSuperSecretPassword"
+}
+###
+
+POST https://localhost:3000/api/users/login HTTP/1.1 
+content-type: application/json 
+{ 
+"username": "test2", 
+"password": "youwillneverguess" 
+} 
+### 
+POST https://localhost:3000/api/fruits HTTP/1.1 
+content-type: application/json 
+Authorization: Bearer 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QyIiwidXNlcmlkIjoiNjEy
+ ZTA2NTQzZDExY2NmZTUwY2ZlNTg4IiwiaWF0IjoxNjMwNTg3MDA3LCJleHAiOjE2MzA1O
+ TA2MDd9.o-5lq9_IKQgxL1MiwtYrbERkHE5tORq6EkxF3wM_lXQ 
+{ 
+"id": "33", 
+"name": "Peach" 
+} 
 ###

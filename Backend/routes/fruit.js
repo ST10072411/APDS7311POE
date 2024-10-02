@@ -1,7 +1,7 @@
 const express = require('express')
 const router= express.Router();
 const ObjectHere = require('../models/fruits')
-
+const checkauth= require('../check-auth')
 
 //Retrieve/fetch the fruits database entries from the cluster
 router.get('', (req,res) => {
@@ -18,8 +18,8 @@ router.get('', (req,res) => {
 
 //Upload/post function
 //router.post('',checkauth, (req,res)=>{
-router.post('', (req,res)=>{
-    const fruit = new Fruit(
+router.post('',checkauth, (req,res)=>{
+    const fruit = new ObjectHere(
         {
             id: req.body.id,
             name: req.body.name

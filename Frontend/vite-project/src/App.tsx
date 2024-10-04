@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Payments from './pages/Payments'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,7 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/payments" element={<div>Payments Page</div>} />
+            <Route path="/payments" element={<Payments />} />
           </Routes>
         </div>
   </Router>

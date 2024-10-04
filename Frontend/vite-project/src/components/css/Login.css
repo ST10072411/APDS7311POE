@@ -1,0 +1,65 @@
+/* Login.css */
+.login-container {
+  max-width: 400px;
+  margin-top: 50px;
+  padding: 40px;
+  background-color: #2c2c2c; /* Dark background */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Darker shadow */
+  color: #fff; /* Light text color */
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #fff; /* Light text color for heading */
+}
+
+.input-group {
+  margin-bottom: 23px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #ddd; /* Light text for labels */
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #555; /* Darker border */
+  background-color: #333; /* Dark input background */
+  color: #fff; /* Light input text */
+  border-radius: 4px;
+  
+}
+
+input::placeholder {
+  color: #888; /* Placeholder color */
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff; /* Primary button color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding-top: 3px;
+}
+
+.login-button:hover {
+  background-color: #0056b3; /* Darker hover color */
+}
+
+.error-message {
+  color: #ff4d4d; /* Light red color for error messages */
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}

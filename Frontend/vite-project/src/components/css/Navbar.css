@@ -1,0 +1,63 @@
+/* Navbar.css */
+.navbar-container {
+  position: relative;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #1f1f1f; /* Dark background */
+  border-radius: 20px;
+  color: #fff; /* Light text color */
+  position: fixed; /* Fix the navbar at the top */
+  top: 10%;
+  left: 50%; /* Align it to the center horizontally */
+  transform: translateX(-50%); /* Center alignment fix */
+  width: 30%; /* Make sure it spans the full width */
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  color: #fff; /* Ensure the header is white */
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+}
+
+.nav-links li {
+  list-style: none;
+}
+
+.nav-links li a {
+  color: #fff; /* Light link color */
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: color 0.3s ease; /* Smooth hover transition */
+}
+
+.nav-links li a:hover {
+  color: #ddd; /* Light gray hover color */
+}
+
+.login-icon {
+  position: fixed;
+  top: 1rem; /* Aligns vertically */
+  right: 2rem; /* Pushes the icon to the right side of the screen */
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  z-index: 1001; /* Keep it above other elements */
+}
+
+.login-icon:hover {
+  color: #ddd;
+}

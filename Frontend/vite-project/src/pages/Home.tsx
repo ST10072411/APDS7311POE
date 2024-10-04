@@ -10,11 +10,11 @@ const Dashboard: React.FC = () => {
 
 
   const localPayment = () => {
-    window.location.href = "/payments"; // Navigate to the local payment page
+    window.location.href = "/Payments"; // Navigate to the local payment page
   };
 
   const internationalPayment = () => {
-    window.location.href = "/payments"; // Navigate to the international payment page
+    window.location.href = "/Payments"; // Navigate to the international payment page
   };
 
 

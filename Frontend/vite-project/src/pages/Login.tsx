@@ -64,6 +64,10 @@ const Login: React.FC = () => {
       // Redirect to dashboard or process login
     };*/
   
+    const handleRegisterClick = () => {
+      navigate("/register");
+    };
+
     return (
       <div className="login-container">
         <h2>Login</h2>
@@ -94,7 +98,15 @@ const Login: React.FC = () => {
         </form>
         {errorMessage && <p className="error">{errorMessage}</p>}
         {successMessage && <p className="success">{successMessage}</p>}
-            {/* Button to handle employee login for pt 3: 
+        
+        <div className="register-section">
+          <p>Don't have an account?</p>
+          <button type="button" onClick={handleRegisterClick} className="register-button">
+            Register
+          </button>
+        </div>
+
+        {/* Button to handle employee login for pt 3: 
         <button type="button" onClick={handleEmployeeLoginClick}>
           Employee Login
         </button>*/}
@@ -105,4 +117,3 @@ const Login: React.FC = () => {
   };
   
   export default Login;
-  

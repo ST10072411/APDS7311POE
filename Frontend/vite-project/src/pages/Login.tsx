@@ -10,7 +10,9 @@ const Login: React.FC = () => {
     password: "",
   });
 
-  
+  const internationalPayment = () => {
+    window.location.href = "/Payments"; // Navigate to the international payment page
+  };
 
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -65,7 +67,7 @@ const Login: React.FC = () => {
     };*/
   
     const handleRegisterClick = () => {
-      navigate("/register");
+      window.location.href = "/Register"; 
     };
 
     return (

@@ -1,141 +1,120 @@
-import React, { useState } from 'react';
-import { Button, TextField, Typography, Container, Grid, Box } from '@mui/material';
-import styles from './Register.module.css';
+import React, { useState } from "react";
+import "../components/css/Register.css";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
-    accountNumber: '',
-    idNumber: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    accountNumber: "",
+    idNumber: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    console.log("Form submitted:", formData);
+    // Here you would typically send the data to your backend
+  };
+
+  const handleLogin = () => {
+    console.log("Login button clicked");
+    // Here you would typically redirect to the login page
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box className={styles.registerContainer} sx={{ mt: 8, mb: 4 }}>
-        <Typography className={styles.title} variant="h4" component="h1" gutterBottom>
-          Register
-        </Typography>
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="First Name"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Last Name"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Username"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Account Number"
-                name="accountNumber"
-                value={formData.accountNumber}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="ID Number"
-                name="idNumber"
-                value={formData.idNumber}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-          </Grid>
-          <Box className={styles.submitButton}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Register
-            </Button>
-          </Box>
-        </form>
-        <Box className={styles.loginSection}>
-          <Typography variant="body1" component="span">
-            Existing Customer?
-          </Typography>
-          <Button className={styles.loginButton} variant="outlined" color="primary">
-            Login
-          </Button>
-        </Box>
-      </Box>
-    </Container>
+    <div className="register-container">
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="input-row">
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            placeholder="First Name"
+            required
+          />
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            placeholder="Last Name"
+            required
+          />
+        </div>
+        <div className="input-row">
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email Address"
+            required
+          />
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="Username"
+            required
+          />
+        </div>
+        <div className="input-row">
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            required
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm Password"
+            required
+          />
+        </div>
+        <div className="input-row">
+          <input
+            type="text"
+            name="accountNumber"
+            value={formData.accountNumber}
+            onChange={handleChange}
+            placeholder="Account Number"
+            required
+          />
+          <input
+            type="text"
+            name="idNumber"
+            value={formData.idNumber}
+            onChange={handleChange}
+            placeholder="ID Number"
+            required
+          />
+        </div>
+        <button type="submit">Register</button>
+      </form>
+      <div className="login-section">
+        <p>Already have an account?</p>
+        <button onClick={handleLogin} className="login-button">Login</button>
+      </div>
+    </div>
   );
 };
 

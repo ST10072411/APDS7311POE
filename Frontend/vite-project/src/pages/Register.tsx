@@ -21,31 +21,46 @@ const Register: React.FC = () => {
     }));
   };
 
-
+  const checkServer = async () => {
+    try {
+      const response = await fetch('https://localhost:3000/'); // Adjust endpoint as needed
+      return response.ok; // Return true if server is responding
+    } catch (error) {
+      console.error('Server not reachable:', error);
+      return false; // Return false if there's an error
+    }
+  };
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const isServerRunning = await checkServer();
+  
+    if (!isServerRunning) {
+      console.error('Server is not running. Please start the backend server.');
+      return;
+    }
+  
     try {
-      
       const response = await fetch('https://localhost:3000/api/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       const data = await response.json();
       console.log('Form submitted:', data);
     } catch (error) {
       console.error('Error submitting form:', error);
-      console.log("Error")
     }
   };
   
   
   
+  
   const handleLogin = () => {
     console.log("Login button clicked");
-    // Here you would typically redirect to the login page
+    window.location.href = "/Login";
   };
 
   return (

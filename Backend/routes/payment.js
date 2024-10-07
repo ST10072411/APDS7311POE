@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const checkauth= require('../check-auth')
 
-//Retrieve/fetch the fruits database entries from the cluster
-router.get('', (req,res) => {
+//Retrieve/fetch the Payment database entries from the cluster
+router.get('',checkauth, (req,res) => {
        ObjectHere.find().then((payments)=>{
         res.json(
             {

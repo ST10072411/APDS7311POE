@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "concurrently": "^9.0.1",
     "nodemon": "^3.1.7"
   },
   "name": "apds7311poe-git",
@@ -37,11 +38,14 @@
     "supports-color": "^5.5.0",
     "to-regex-range": "^5.0.1",
     "touch": "^3.1.1",
-    "undefsafe": "^2.0.5"
+    "undefsafe": "^2.0.5",
+    "vite": "^5.4.8"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "react-scripts start"
+    "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+  "start-backend": "cd Backend && npm start",
+  "start-frontend": "cd Frontend/vite-project && npm run dev"
   },
   "keywords": [],
   "author": "",

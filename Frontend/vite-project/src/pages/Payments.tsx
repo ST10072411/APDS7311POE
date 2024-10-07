@@ -17,15 +17,48 @@ const Payments: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle payment submission logic here
-    console.log('Payment submitted:', formData);
+
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found. Please log in.');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://localhost:3000/api/payments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Pass the token in the Authorization header
+        },
+        body: JSON.stringify({
+          recieverName: formData.recipientName,
+          bank: formData.recipientBank,
+          accNumber: formData.accountNumber,
+          payAmount: formData.amount,
+          swiftCode: formData.swiftCode,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Payment created successfully:', result);
+        alert('Payment created successfully!');
+      } else {
+        const error = await response.json();
+        console.error('Error creating payment:', error.message || 'Unknown error');
+        alert(`Error: ${error.message || 'Failed to create payment'}`);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      alert('An error occurred. Please try again later.');
+    }
   };
 
   const handleCancel = () => {
-    // Handle cancellation logic here
-    console.log('Payment cancelled');
     setFormData({
       recipientName: '',
       recipientBank: '',

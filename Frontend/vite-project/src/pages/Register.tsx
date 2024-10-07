@@ -25,6 +25,7 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      
       const response = await fetch('https://localhost:3000/api/users/signup', {
         method: 'POST',
         headers: {
@@ -36,6 +37,7 @@ const Register: React.FC = () => {
       console.log('Form submitted:', data);
     } catch (error) {
       console.error('Error submitting form:', error);
+      console.log("Error")
     }
   };
   

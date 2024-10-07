@@ -47,7 +47,7 @@ router.post('/signup', async (req, res) => {
             accountNumber: sanitizedAccountNumber,
             idNumber: sanitizedIdNumber
           });
-
+          console.log("Thing stored?")
           user.save()
               .then(result => {
                   res.status(201).json({

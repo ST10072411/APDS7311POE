@@ -15,6 +15,7 @@ const cert = fs.readFileSync('keys/certificate.pem');
 const options = {
     server:{ sslCA: cert} 
 };
+//Make an environment variable 
 const connstring = 
 'mongodb+srv://briceagnew1:XmlDtsFnkYjLKxCo@clusterthebigone.lqgt0vn.mongodb.net/farmDatabase?retryWrites=true&w=majority&appName=ClusterTheBigOne';
 
@@ -46,7 +47,7 @@ app.use((reg,res,next)=>
 { 
     res.setHeader('Access-Control-Allow-Origin', '*'); 
     res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,Authorization'); 
-    res.setHeader('Access-Control-Allow-Methods', '*'); 
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     next();
 });
 

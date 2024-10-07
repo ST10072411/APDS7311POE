@@ -2,8 +2,26 @@
 const https = require('https');
 const app = require('./app');
 const fs = require('fs');
+const cors = require('cors');
 
 const port = 3000
+
+const corsOptions = {
+    origin: 'http://localhost:5173/', // Update this to your frontend URL
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization'
+  };
+
+  app.use(cors(corsOptions));
+
+/*
+  app.use((req, res, next) => {
+    if (req.secure) {
+      next(); // Request was via https, so do no special handling
+    } else {
+      res.redirect('https://' + req.headers.host + req.url); // Redirect to https
+    }
+  });*/
 
 const server = https.createServer(
     {
@@ -27,6 +45,10 @@ app.get('/',(req,res)=>{
 
 app.listen(port)
 */
+
+
+
+
 
 /* Part 2
 const http = require('http');

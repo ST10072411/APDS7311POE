@@ -29,13 +29,14 @@ POST https://localhost:3000/api/users/signup HTTP/1.1
 Content-Type: application/json
 
 {
-    "firstName": "testUser",
+    "firstName": "testUser2",
     "lastName": "Test",
-    "email": "test@gmail.com",
-    "username": "TesterUser",
-    "password": "Bingus",
-    "accountNumber": 1234,
-    "idNumber": 011212299,
+    "email": "test2@gmail.com",
+    "username": "TesterUser2",
+    "password": "Bingus3",
+    "confirmPassword": "Bingus3",
+    "accountNumber": "1234",
+    "idNumber": "011212299"
 }
 ###
 

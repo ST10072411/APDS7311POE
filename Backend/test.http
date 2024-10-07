@@ -17,8 +17,8 @@ POST https://localhost:3000/api/fruits HTTP/1.1
 content-type: application/json
 
 {
-    "id": "7",
-    "name": "Tomato"
+    "id": "9",
+    "name": "Guava"
 }
 ###
 //
@@ -29,26 +29,47 @@ POST https://localhost:3000/api/users/signup HTTP/1.1
 Content-Type: application/json
 
 {
-    "username" : "testUser",
-    "password" : "theSuperSecretPassword"
+    "firstName": "testUser",
+    "lastName": "Test",
+    "email": "test@gmail.com",
+    "username": "TesterUser",
+    "password": "Bingus",
+    "accountNumber": 1234,
+    "idNumber": 011212299,
 }
 ###
 
-POST https://localhost:3000/api/users/login HTTP/1.1 
-content-type: application/json 
-{ 
-"username": "test2", 
-"password": "youwillneverguess" 
-} 
+POST https://localhost:3000/api/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "testUser",
+    "password": "theSuperSecretPassword"
+}
+
+
 ### 
-POST https://localhost:3000/api/fruits HTTP/1.1 
-content-type: application/json 
-Authorization: Bearer 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QyIiwidXNlcmlkIjoiNjEy
- ZTA2NTQzZDExY2NmZTUwY2ZlNTg4IiwiaWF0IjoxNjMwNTg3MDA3LCJleHAiOjE2MzA1O
- TA2MDd9.o-5lq9_IKQgxL1MiwtYrbERkHE5tORq6EkxF3wM_lXQ 
-{ 
-"id": "33", 
-"name": "Peach" 
-} 
+POST https://localhost:3000/api/fruits HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RVc2VyIiwidXNlcklkIjoiNjcwMjk0OTU5NGViNjEyNGYwOTZjMGFlIiwiaWF0IjoxNzI4MjI0NzIwLCJleHAiOjE3MjgyMjgzMjB9.AlTZrEFbnWY9hHZQheZwBPxXxaxIlw0KLNmxBKYKoT8
+
+{
+    "id": "48",
+    "name": "Guava"
+}
+
+
+###
+POST https://localhost:3000/api/payments HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RVc2VyIiwidXNlcklkIjoiNjcwMjk0OTU5NGViNjEyNGYwOTZjMGFlIiwiaWF0IjoxNzI4MjI0NzIwLCJleHAiOjE3MjgyMjgzMjB9.AlTZrEFbnWY9hHZQheZwBPxXxaxIlw0KLNmxBKYKoT8
+
+{
+    "recieverName": "Mr FL FOX",
+    "bank": "Standard Bank",
+    "accNumber": "021122112",
+    "payAmount": "500.00",
+    "swiftCode": "STANSA33XLF"
+}
+
 ###

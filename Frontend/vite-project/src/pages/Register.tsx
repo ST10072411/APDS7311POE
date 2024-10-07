@@ -21,12 +21,26 @@ const Register: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Here you would typically send the data to your backend
-  };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('https://localhost:3000/api/users/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      console.log('Form submitted:', data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+  
+  
+  
   const handleLogin = () => {
     console.log("Login button clicked");
     // Here you would typically redirect to the login page

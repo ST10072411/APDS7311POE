@@ -10,9 +10,10 @@ const Login: React.FC = () => {
     password: "",
   });
 
+  /*
   const internationalPayment = () => {
     window.location.href = "/Payments"; // Navigate to the international payment page
-  };
+  };*/
 
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -49,10 +50,12 @@ const Login: React.FC = () => {
     }
   };
 
+  /*
   const handleEmployeeLoginClick = () => {
     navigate("/employee-login");
   };
-
+  */
+ 
     // Function to handle form submission
    /* const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -67,7 +70,7 @@ const Login: React.FC = () => {
     };*/
   
     const handleRegisterClick = () => {
-      window.location.href = "/Register"; 
+      window.location.href = "/Register";
     };
 
     return (

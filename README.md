@@ -1,7 +1,5 @@
 APDS7311 POE TASK 2 
 
-A brief description of what your project does and its purpose.
-
 Team Members: ST10072411, ST10136414, ST10058357, ST10169076, ST10065470
 
 Getting Started
@@ -59,26 +57,6 @@ Backend: Node.js, Express.js, MongoDB
 Database: MongoDB (Local or MongoDB Atlas)
 Tools: VS Code, Git, npm/yarn, github, morgan logs, artillery, Postman.
 
-Project Structure
-yourproject/
-│
-├── client/             # React frontend
-│   ├── public/         # Static assets
-│   └── src/            # React components, hooks, etc.
-│
-├── config/             # MongoDB config, environment variables
-│
-├── controllers/        # Backend business logic
-│
-├── models/             # MongoDB models (schemas)
-│
-├── routes/             # API routes
-│
-├── .env                # Environment variables
-│
-├── server.js           # Express server entry point
-│
-└── package.json        # Dependencies and scripts
 
 Security Testing
 Request limit and timeout testing
@@ -87,7 +65,7 @@ POSTMAN Application for automated testing of requests
 Requests show in log.
 
 Notes: 
-Several Sections 
+Several Sections had AI use for debugging errors and getting ideas 
 
 Contributing
 If you want to contribute to this project, feel free to create a pull request or submit an issue.

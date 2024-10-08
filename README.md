@@ -36,7 +36,7 @@ Technologies Used
 Frontend: React, JavaScript, HTML, CSS
 Backend: Node.js, Express.js, MongoDB
 Database: MongoDB (Local or MongoDB Atlas)
-Tools: VS Code, Git, npm/yarn, github, morgan logs, artillery.
+Tools: VS Code, Git, npm/yarn, github, morgan logs, artillery, Postman.
 
 Project Structure
 yourproject/
@@ -59,6 +59,11 @@ yourproject/
 │
 └── package.json        # Dependencies and scripts
 
+Security Testing
+Request limit and timeout testing
+artilery: run quick --count 100 -n 1000 https://localhost:3000/api/users/login      
+POSTMAN Application for automated testing of requests
+Requests show in log.
 
 API Endpoints
 

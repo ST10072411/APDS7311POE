@@ -14,14 +14,9 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            cd frontend
-            npm install
-            cd ../backend
-            npm install
       - run:
           name: Run Tests
-          command: |
-            cd backend      
+          command: |  
 
 workflows:
   version: 2

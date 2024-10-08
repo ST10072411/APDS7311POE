@@ -7,7 +7,7 @@ const cors = require('cors');
 const port = 3000
 
 const corsOptions = {
-    origin: 'http://localhost:5173/', // Update this to your frontend URL
+    origin: 'https://localhost:5173/', // Update this to your frontend URL
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization'
   };
@@ -25,8 +25,8 @@ const corsOptions = {
 
 const server = https.createServer(
     {
-        key: fs.readFileSync('keys/privatekey.pem'),
-        cert: fs.readFileSync('keys/certificate.pem')
+        key: fs.readFileSync('keys/key.pem'),
+        cert: fs.readFileSync('keys/cert.pem')
     },app);
 
 server.listen(port, () => {

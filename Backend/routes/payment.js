@@ -1,6 +1,6 @@
 const express = require('express')
 const router= express.Router();
-const ObjectHere = require('../models/Payments')
+const ObjectHere = require('../models/payments')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const checkauth= require('../check-auth')

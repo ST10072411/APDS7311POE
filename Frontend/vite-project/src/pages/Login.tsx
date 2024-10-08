@@ -58,10 +58,10 @@ const Login: React.FC = () => {
         console.log("Token received:", result.token);
   
         // Save the token to localStorage
-        localStorage.setItem("token", result.token);
+        localStorage.setItem("token", result.token);//local storage
   
         // Verify if the token is saved correctly
-        const storedToken = localStorage.getItem("token");
+        const storedToken = localStorage.getItem("token");//local satorage
         if (storedToken) {
           console.log("Token stored in localStorage:", storedToken);
         } else {

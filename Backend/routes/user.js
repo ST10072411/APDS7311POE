@@ -9,9 +9,6 @@ const sanitizeInput= (input) => {
     return input.replace(/[^a-zA-Z0-9 ]/g, '');
 }
 
-
-
-
 //Signup function
 router.post('/signup', async (req, res) => {
     
@@ -64,44 +61,55 @@ router.post('/signup', async (req, res) => {
       });
 });
 
+ //Login Function
+router.post('/login', (req, res) => {
+  UserHere.findOne({ username: req.body.username })
+      .then(user => {
+          if (!user) {
+              console.log("User not found");
+              return res.status(401).json({
+                  message: "Authentication Failed!"
+              });
+          }
 
-//Login Function
-// Login Route (Assuming you have a User model with these fields)
-router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-  
-    try {
-      // Find the user
-      const user = await User.findOne({ username });
-      if (!user) {
-        return res.status(401).json({ message: 'Authentication failed: User not found' });
-      }
-  
-      // Check the password
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (!validPassword) {
-        return res.status(401).json({ message: 'Authentication failed: Incorrect password' });
-      }
-  
-      // Generate a JWT token
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  
-      // Send the token and user info in the response
-      res.status(200).json({
-        message: 'Login successful',
-        token: token,
-        user: {
-          username: user.username,
-          accountNumber: user.accountNumber,
-          accountBalance: user.accountBalance
-        }
+          console.log("User found:", user);
+          console.log("Input password:", req.body.password);
+          console.log("Stored hashed password:", user.password);
+
+
+          bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+              if (err) {
+                  console.error('Error comparing passwords:', err);
+                  return res.status(500).json({
+                      message: "Error during authentication"
+                  });
+              }
+
+              console.log("Password comparison result:", isMatch);
+
+              if (!isMatch) {
+                  console.log("Password does not match");
+                  return res.status(401).json({
+                      message: "Authentication Failed!"
+                  });
+              }
+
+              const token = jwt.sign(
+                  { username: user.username, userId: user._id },
+                  'secret_this_should_be_longer_than_it_is',
+                  { expiresIn: '1h' }
+              );
+              console.log("Authentication successful, token generated");
+              res.status(200).json({ token: token });
+          });
+      })
+      .catch(err => {
+          console.log("Error during authentication", err);
+          return res.status(500).json({
+              message: "Error during authentication"
+          });
       });
-    } catch (error) {
-      res.status(500).json({ message: 'Login error', error });
-    }
-  });
-  
-  
+}); 
 
 //#region 
 /*

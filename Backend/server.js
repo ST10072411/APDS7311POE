@@ -25,8 +25,8 @@ const corsOptions = {
 
 const server = https.createServer(
     {
-        key: fs.readFileSync('keys/key.pem'),
-        cert: fs.readFileSync('keys/cert.pem')
+        key: fs.readFileSync('keys/privatekey.pem'),
+        cert: fs.readFileSync('keys/certificate.pem')
     },app);
 
 server.listen(port, () => {

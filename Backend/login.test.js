@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('./app'); // Adjust this to your actual Express app file
 const { exec } = require('child_process');
 
-// Start the server
+// Starts 'server'
 let server;
 
 // Use a function to start the server before running tests

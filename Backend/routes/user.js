@@ -94,7 +94,7 @@ router.post('/login', (req, res) => {
 
               const token = jwt.sign(
                   { username: user.username, userId: user._id },
-                  process.env.SECRET_TOKEN,
+                  'secret_this_should_be_longer_than_it_is',
                   { expiresIn: '1h' }
               );
               console.log("Authentication successful, token generated");

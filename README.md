@@ -36,7 +36,7 @@ Technologies Used
 Frontend: React, JavaScript, HTML, CSS
 Backend: Node.js, Express.js, MongoDB
 Database: MongoDB (Local or MongoDB Atlas)
-Tools: VS Code, Git, npm/yarn, github.
+Tools: VS Code, Git, npm/yarn, github, morgan logs, artillery.
 
 Project Structure
 yourproject/

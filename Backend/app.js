@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 const rateLimit = require('express-rate-limit'); // Import rate limit
 const urlprefix= '/api'
-
+const morgan = require('morgan');
 //Setting Up the Mongo DB conection and the SSL connection
 const mongoose = require('mongoose');
 const fs = require('fs');
@@ -44,6 +44,9 @@ mongoose.connect(connstring)
 
 app.use(express.json())
 
+// Use 'combined' for detailed logging, or 'dev' for concise
+app.use(morgan('dev'));
+
 //Prevents Backend/Frontend communication issues
 app.use((reg,res,next)=> 
 { 
@@ -66,10 +69,6 @@ app.get('/', (req, res) => {
     res.send('Hello World Express');
 });
 
-const morgan = require('morgan');
-
-// Use 'combined' for detailed logging, or 'dev' for concise
-app.use(morgan('dev'));
 
 //Stating the Usage of the route files
 app.use(urlprefix+'/users',userRoutes)

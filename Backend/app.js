@@ -55,9 +55,17 @@ app.use((reg,res,next)=>
 });
 
 
-app.get('/', (req,res) => {
-    res.send('Hello World Express')
-})
+// Rate limiting middleware
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter); // limit on all requests
+
+app.get('/', (req, res) => {
+    res.send('Hello World Express');
+});
 
 //Stating the Usage of the route files
 app.use(urlprefix+'/fruits',fruitRoutes)

@@ -47,7 +47,8 @@
   "scripts": {
     "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
     "start-backend": "cd Backend && npm start",
-    "start-frontend": " cd Frontend/vite-project && npm run dev"
+    "start-frontend": " cd Frontend/vite-project && npm run dev",
+    "open-edge": "start msedge https://localhost:5173"
   },
   "keywords": [],
   "author": "",

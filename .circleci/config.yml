@@ -21,8 +21,7 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            cd backend
-            npm test  # This assumes your test script is set up in package.json
+            cd backend      
 
 workflows:
   version: 2

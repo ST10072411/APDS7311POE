@@ -1,15 +1,23 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}"
-        }
+      {
+        "name": "Run Both Backend and Frontend",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "start"], // This runs the 'start' script defined in your package.json
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
+      {
+        "name": "Run Frontend in Edge",
+        "type": "msedge",
+        "request": "launch",
+        "url": "https://localhost:5173", // Your Vite dev server URL
+        "webRoot": "${workspaceFolder}/Frontend/vite-project",
+        "sourceMaps": true
+      }
     ]
-}
+  }
+  

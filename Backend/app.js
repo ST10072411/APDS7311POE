@@ -3,21 +3,25 @@
 
 const express = require('express');
 const app = express();
+const rateLimit = require('express-rate-limit'); // Import rate limit
+require('dotenv').config();
 const urlprefix= '/api'
-const Fruit = require('./models/fruits')
-
+const morgan = require('morgan');
 //Setting Up the Mongo DB conection and the SSL connection
 const mongoose = require('mongoose');
 const fs = require('fs');
-const cert = fs.readFileSync('keys/cert.pem');
+const pathToCert = __dirname + '/../backend/keys/cert.pem';
+console.log('Loading SSL Certificate from:', pathToCert); // Log the path
+
+const cert = fs.readFileSync(pathToCert, 'utf8'); // Load the certificate
 
 
 const options = {
     server:{ sslCA: cert} 
 };
 //Make an environment variable 
-const connstring = 
-'mongodb+srv://briceagnew1:XmlDtsFnkYjLKxCo@clusterthebigone.lqgt0vn.mongodb.net/farmDatabase?retryWrites=true&w=majority&appName=ClusterTheBigOne';
+const connstring = process.env.DB_CONNSTRING
+//'mongodb+srv://briceagnew1:XmlDtsFnkYjLKxCo@clusterthebigone.lqgt0vn.mongodb.net/farmDatabase?retryWrites=true&w=majority&appName=ClusterTheBigOne';
 
 /*
 const connstring = 
@@ -25,7 +29,6 @@ const connstring =
 */
 
 //Stating the route Directories
-const fruitRoutes = require("./routes/fruit")
 const userRoutes = require("./routes/user")
 const paymentsRoutes = require('./routes/payment');
 
@@ -42,6 +45,9 @@ mongoose.connect(connstring)
 
 app.use(express.json())
 
+// Use 'combined' for detailed logging, or 'dev' for concise
+app.use(morgan('dev'));
+
 //Prevents Backend/Frontend communication issues
 app.use((reg,res,next)=> 
 { 
@@ -52,12 +58,20 @@ app.use((reg,res,next)=>
 });
 
 
-app.get('/', (req,res) => {
-    res.send('Hello World Express')
-})
+// Rate limiting middleware
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter); // limit on all requests
+
+app.get('/', (req, res) => {
+    res.send('Hello World Express');
+});
+
 
 //Stating the Usage of the route files
-app.use(urlprefix+'/fruits',fruitRoutes)
 app.use(urlprefix+'/users',userRoutes)
 app.use(urlprefix+'/payments', paymentsRoutes);
 

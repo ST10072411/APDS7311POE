@@ -3,6 +3,8 @@ const router= express.Router();
 const UserHere = require('../models/users')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+require('dotenv').config();
+
 const checkAuth = require('../check-auth');
 
 //Does this work?
@@ -31,10 +33,6 @@ router.post('/signup', async (req, res) => {
     //encryption
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
-         /* const user = new UserHere({
-              username: req.body.username,
-              password: hash
-          });*/
 
           const user = new UserHere({
             username: sanitizedUsername,
@@ -107,7 +105,7 @@ router.post('/login', (req, res) => {
 
               const token = jwt.sign(
                   { username: user.username, userId: user._id },
-                  'secret_this_should_be_longer_than_it_is',
+                  process.env.SECRET_TOKEN,
                   { expiresIn: '1h' }
               );
               console.log("Authentication successful, token generated");

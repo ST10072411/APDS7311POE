@@ -9,7 +9,7 @@ const Fruit = require('./models/fruits')
 //Setting Up the Mongo DB conection and the SSL connection
 const mongoose = require('mongoose');
 const fs = require('fs');
-const cert = fs.readFileSync('keys/certificate.pem');
+const cert = fs.readFileSync('keys/cert.pem');
 
 
 const options = {

@@ -1,0 +1,25 @@
+[ req ]
+default_bits           = 2048
+default_keyfile        = privkey.pem
+distinguished_name     = req_distinguished_name
+req_extensions         = v3_req
+
+[ req_distinguished_name ]
+countryName            = SA (2 letter code)
+countryName_default    = SA
+stateOrProvinceName    = Western Province
+stateOrProvinceName_default = Western Province
+localityName           = Cape Town 
+organizationName       = Varsityt College 
+organizationalUnitName = Organizational Unit Name (eg, section)
+commonName             = Brice
+commonName_default     = Bricelocalhost
+
+[ v3_req ]
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = localhost
+DNS.2 = ST10072411

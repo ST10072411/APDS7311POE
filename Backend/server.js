@@ -1,35 +1,36 @@
-//const http = require('http');
 const https = require('https');
 const app = require('./app');
 const fs = require('fs');
 const cors = require('cors');
 
-const port = 3000
+const port = 3000;
 
+// CORS options
 const corsOptions = {
     origin: 'https://localhost:5173/', // Update this to your frontend URL
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization'
-  };
+};
 
-  app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
-/*
-  app.use((req, res, next) => {
-    if (req.secure) {
-      next(); // Request was via https, so do no special handling
-    } else {
-      res.redirect('https://' + req.headers.host + req.url); // Redirect to https
-    }
-  });*/
+// Define the correct paths for the SSL key and certificate
+const keyPath = __dirname + '/../backend/keys/key.pem'; // Adjusted path to key.pem
+const certPath = __dirname + '/../backend/keys/cert.pem'; // Adjusted path to cert.pem
 
+// Log the paths for debugging
+console.log('Loading SSL Key from:', keyPath);
+console.log('Loading SSL Certificate from:', certPath);
+
+// Create the HTTPS server
 const server = https.createServer(
     {
-        key: fs.readFileSync('keys/key.pem'),
-        cert: fs.readFileSync('keys/cert.pem')
-    },app);
+        key: fs.readFileSync(keyPath),  // Load the key
+        cert: fs.readFileSync(certPath)  // Load the certificate
+    },
+    app
+);
 
 server.listen(port, () => {
     console.log(`Server is running on https://localhost:${port}`);
 });
-

@@ -9,7 +9,10 @@ const Fruit = require('./models/fruits')
 //Setting Up the Mongo DB conection and the SSL connection
 const mongoose = require('mongoose');
 const fs = require('fs');
-const cert = fs.readFileSync('keys/cert.pem');
+const pathToCert = __dirname + '/../backend/keys/cert.pem';
+console.log('Loading SSL Certificate from:', pathToCert); // Log the path
+
+const cert = fs.readFileSync(pathToCert, 'utf8'); // Load the certificate
 
 
 const options = {

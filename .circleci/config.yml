@@ -3,33 +3,36 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: circleci/node:lts
+      - image: circleci/node:20  
 
 jobs:
   build:
     executor: node-executor
     steps:
-      - checkout
-      
+      - checkout  # Pulls the code from your GitHub repo
+
+      # Frontend steps
       - run:
-          name: Install backend dependencies
-          working_directory: ./Backend
-          command: npm install
-          
-      - run:
-          name: Install frontend dependencies
+          name: Install Frontend Dependencies
           working_directory: ./Frontend/vite-project
           command: npm install
-          
-      - run:
-          name: Run backend tests
-          working_directory: ./Backend
-          command: npm run test # Update if you have a test script in package.json
 
       - run:
-          name: Run frontend tests
+          name: Build Frontend
           working_directory: ./Frontend/vite-project
-          command: npm run test # Update if you have a test script in package.json
+          command: npm run build
+
+      # Backend steps
+      - run:
+          name: Install Backend Dependencies
+          working_directory: ./Backend
+          command: npm install
+
+      # Optional: Run any backend or frontend tests
+      - run:
+          name: Run Backend Tests (if you have any)
+          working_directory: ./Backend
+          command: npm test
 
 workflows:
   version: 2

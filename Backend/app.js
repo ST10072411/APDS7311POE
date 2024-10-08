@@ -4,7 +4,6 @@
 const express = require('express');
 const app = express();
 const urlprefix= '/api'
-const Fruit = require('./models/fruits')
 
 //Setting Up the Mongo DB conection and the SSL connection
 const mongoose = require('mongoose');
@@ -28,7 +27,6 @@ const connstring =
 */
 
 //Stating the route Directories
-const fruitRoutes = require("./routes/fruit")
 const userRoutes = require("./routes/user")
 const paymentsRoutes = require('./routes/payment');
 
@@ -60,7 +58,6 @@ app.get('/', (req,res) => {
 })
 
 //Stating the Usage of the route files
-app.use(urlprefix+'/fruits',fruitRoutes)
 app.use(urlprefix+'/users',userRoutes)
 app.use(urlprefix+'/payments', paymentsRoutes);
 

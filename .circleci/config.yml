@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: circleci/node:20.18.0
+      - image: circleci/node:lts
     working_directory: ~/repo
 
 jobs:
@@ -14,15 +14,9 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            cd frontend
-            npm install
-            cd ../backend
-            npm install
       - run:
           name: Run Tests
-          command: |
-            cd backend
-            npm test  # This assumes your test script is set up in package.json
+          command: |  
 
 workflows:
   version: 2

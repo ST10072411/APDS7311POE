@@ -1,1 +1,75 @@
-The README file for APDS7311 POE
+APDS7311 POE TASK 2 
+
+A brief description of what your project does and its purpose.
+
+
+Getting Started
+These instructions will help you set up the project on your local machine for development and testing purposes.
+
+Prerequisites
+Before you begin, ensure you have the following installed:
+
+Node.js (vX.X.X or higher)
+MongoDB (make sure MongoDB is running locally or use a cloud solution like MongoDB Atlas)
+Git 
+VS Code
+
+Installation
+Clone the repository:
+https://github.com/ST10072411/APDS7311POE
+Open Project in vs code. 
+
+or unzip project file
+APDS7311POE.zip
+Open Project in vs code 
+
+Running the App
+There are two options to run App: 
+1: Using VS code press F5 to run frontend and backend together.
+- Press ctrl + click https://localhost:5173 in terminal to view app in browser.
+
+2: Using VS code run a new terminal.
+- Run npm Start command in terminal.
+- Press ctrl + click https://localhost:5173 in terminal to view app in browser.
+
+Technologies Used
+Frontend: React, JavaScript, HTML, CSS
+Backend: Node.js, Express.js, MongoDB
+Database: MongoDB (Local or MongoDB Atlas)
+Tools: VS Code, Git, npm/yarn, github.
+
+Project Structure
+yourproject/
+│
+├── client/             # React frontend
+│   ├── public/         # Static assets
+│   └── src/            # React components, hooks, etc.
+│
+├── config/             # MongoDB config, environment variables
+│
+├── controllers/        # Backend business logic
+│
+├── models/             # MongoDB models (schemas)
+│
+├── routes/             # API routes
+│
+├── .env                # Environment variables
+│
+├── server.js           # Express server entry point
+│
+└── package.json        # Dependencies and scripts
+
+
+API Endpoints
+
+User Routes
+
+
+List and describe other endpoints your app uses.
+
+Contributing
+If you want to contribute to this project, feel free to create a pull request or submit an issue.
+
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
+

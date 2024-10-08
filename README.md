@@ -1,7 +1,5 @@
 APDS7311 POE TASK 2 
 
-A brief description of what your project does and its purpose.
-
 Team Members: ST10072411, ST10136414, ST10058357, ST10169076, ST10065470
 
 Getting Started

@@ -3,6 +3,7 @@
 
 const express = require('express');
 const app = express();
+const rateLimit = require('express-rate-limit'); // Import rate limit
 const urlprefix= '/api'
 const Fruit = require('./models/fruits')
 
@@ -66,6 +67,11 @@ app.use(limiter); // limit on all requests
 app.get('/', (req, res) => {
     res.send('Hello World Express');
 });
+
+const morgan = require('morgan');
+
+// Use 'combined' for detailed logging, or 'dev' for concise
+app.use(morgan('dev'));
 
 //Stating the Usage of the route files
 app.use(urlprefix+'/fruits',fruitRoutes)

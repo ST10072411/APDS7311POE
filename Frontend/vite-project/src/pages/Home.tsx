@@ -1,22 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import '../components/css/Dashboard.css'; 
+import '../components/css/Dashboard.css';
 
 const Dashboard: React.FC = () => {
-  const [customerName, setCustomerName] = useState('');
-  const [customerBalance, setCustomerBalance] = useState('');
-  const [accNumber, setAccNumber] = useState('');
+  const [userData, setUserData] = useState({
+    firstName: '',
+    accountNumber: '',
+    accountBalance: '',
+    username: ''
+  });
 
   useEffect(() => {
-    // Retrieve values from localStorage
-    const storedUsername = localStorage.getItem('username');
-    const storedBalance = localStorage.getItem('accountBalance');
-    const storedAccountNumber = localStorage.getItem('accountNumber');
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
 
-    // Update state variables
-    if (storedUsername) setCustomerName(storedUsername);
-    if (storedBalance) setCustomerBalance(`$${storedBalance}`);
-    if (storedAccountNumber) setAccNumber(storedAccountNumber);
-  }, []); // Empty dependency array ensures this runs once after component mounts
+      try {
+        const response = await fetch('http://localhost:3000/api/users/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Raw user data from server:', data);
+          setUserData(data);
+        } else {
+          console.error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const localPayment = () => {
     window.location.href = "/Payments"; // Navigate to the local payment page
@@ -29,7 +50,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Customer Dashboard</h1>
-      <h2 className="greeting">Hello, {customerName || "Customer's Name"}</h2>
+      <h2 className="greeting">Hello, {userData.firstName}</h2>
       
       <div className="payment-buttons">
         <button className="payment-btn" onClick={localPayment}>
@@ -44,10 +65,10 @@ const Dashboard: React.FC = () => {
         <h3>Banking Details</h3>
         <div className="account-info">
           <div className="account-detail">
-            <span>Current Acc No:</span> {accNumber || "xxxxxxxxxxx"}
+            <span>Current Acc No:</span> {userData.accountNumber}
           </div>
           <div className="account-detail">
-            <span>Available Bal:</span> {customerBalance || "$0.00"}
+            <span>Available Bal:</span> ${userData.accountBalance}
           </div>
         </div>
       </div>
@@ -78,6 +99,14 @@ const Dashboard: React.FC = () => {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      {/* Debugging information (remove in production) */}
+      <div style={{display: 'none'}}>
+        <p>Username: {userData.username}</p>
+        <p>First Name: {userData.firstName}</p>
+        <p>Account Number: {userData.accountNumber}</p>
+        <p>Account Balance: {userData.accountBalance}</p>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config();
 
+const checkAuth = require('../check-auth');
 
 //Does this work?
 const sanitizeInput= (input) => {
@@ -40,22 +41,32 @@ router.post('/signup', async (req, res) => {
             lastName: sanitizedLastName,
             email: sanitizedEmail,
             accountNumber: sanitizedAccountNumber,
-            idNumber: sanitizedIdNumber
+            idNumber: sanitizedIdNumber,
+            accountBalance: 0 // Make sure to set an initial balance
           });
-          console.log("Thing stored?")
+          console.log("User object created:", user); // Log the user object before saving
           user.save()
-              .then(result => {
-                  res.status(201).json({
-                      message: 'User created',
-                      result: result
-                  });
-                  
-              })
-              .catch(err => {
-                  res.status(500).json({
-                      error: err
-                  });
+            .then(savedUser => {
+              console.log("User saved successfully:", savedUser);
+              res.status(201).json({
+                  message: 'User created',
+                  result: savedUser
               });
+            })
+            .catch(err => {
+              console.error("Error saving user:", err);
+              res.status(500).json({
+                  error: err.message,
+                  stack: err.stack
+              });
+            });
+      })
+      .catch(err => {
+        console.error("Error hashing password:", err);
+        res.status(500).json({
+            error: err.message,
+            stack: err.stack
+        });
       });
 });
 
@@ -123,5 +134,26 @@ router.delete('/:id', (req, res) => {
 })
 */
 //#endregion
+
+// Add this new route
+router.get('/me', checkAuth, async (req, res) => {
+  try {
+    const user = await UserHere.findById(req.userData.userId);
+    if (!user) {
+      console.log('User not found for ID:', req.userData.userId); // Add this line
+      return res.status(404).json({ message: 'User not found' });
+    }
+    console.log('User data being sent:', user); // Add this line
+    res.status(200).json({
+      firstName: user.firstName,
+      accountNumber: user.accountNumber,
+      accountBalance: user.accountBalance.toFixed(2), // Update to use toFixed(2)
+      username: user.username
+    });
+  } catch (error) {
+    console.error('Error in /me route:', error); // Add this line
+    res.status(500).json({ message: 'Error fetching user data', error: error.message });
+  }
+});
 
 module.exports = router

@@ -3,6 +3,7 @@
 
 const express = require('express');
 const app = express();
+require('dotenv').config();
 const urlprefix= '/api'
 
 //Setting Up the Mongo DB conection and the SSL connection
@@ -18,8 +19,8 @@ const options = {
     server:{ sslCA: cert} 
 };
 //Make an environment variable 
-const connstring = 
-'mongodb+srv://briceagnew1:XmlDtsFnkYjLKxCo@clusterthebigone.lqgt0vn.mongodb.net/farmDatabase?retryWrites=true&w=majority&appName=ClusterTheBigOne';
+const connstring = process.env.DB_CONNSTRING
+//'mongodb+srv://briceagnew1:XmlDtsFnkYjLKxCo@clusterthebigone.lqgt0vn.mongodb.net/farmDatabase?retryWrites=true&w=majority&appName=ClusterTheBigOne';
 
 /*
 const connstring = 

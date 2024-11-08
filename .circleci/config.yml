@@ -16,15 +16,14 @@ jobs:
   sonarqube:
     working_directory: ~/build
     docker:
-      - image: alpine:latest
+      - image: debian:latest
     resource_class: small
     steps:
-      - run: apk update
-      - run: apk upgrade
-      - run: apk --no-cache add --update openssh git curl nodejs npm bsdtar
+      - run: apt-get update
+      - run: apt-get install -y unzip wget git curl nodejs npm
       - run: |
           wget -O /usr/local/bin/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip && \
-          bsdtar -xvf /usr/local/bin/sonar-scanner-cli.zip -C /usr/local && \
+          unzip /usr/local/bin/sonar-scanner-cli.zip -d /usr/local && \
           mv /usr/local/sonar-scanner-*/ /usr/local/sonar-scanner && \
           ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner
       - checkout

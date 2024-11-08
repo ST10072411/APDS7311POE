@@ -20,7 +20,9 @@ jobs:
     resource_class: small
     steps:
       - run: apt-get update
-      - run: apt-get install -y unzip wget git curl nodejs npm
+      - run: apt-get install -y unzip wget git curl nodejs npm openjdk-17-jdk
+      - run: |
+          update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
       - run: |
           wget -O /usr/local/bin/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip && \
           unzip /usr/local/bin/sonar-scanner-cli.zip -d /usr/local && \

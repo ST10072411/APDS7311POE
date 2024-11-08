@@ -28,12 +28,12 @@ jobs:
       # Update and upgrade the package index in the Alpine image.
       - run: apk update
       - run: apk upgrade
-      # Install required tools and dependencies, using libarchive-tools or p7zip instead of bsdtar.
-      - run: apk --no-cache add --update openssh git curl nodejs npm libarchive-tools
-      # Download and extract the SonarQube scanner using bsdtar (part of libarchive-tools).
+      # Install required tools and dependencies, including unzip.
+      - run: apk --no-cache add --update openssh git curl nodejs npm unzip
+      # Download and extract the SonarQube scanner using unzip.
       - run: |
           wget -O /usr/local/bin/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip && \
-          bsdtar -xf /usr/local/bin/sonar-scanner-cli.zip -C /usr/local && \  # Use bsdtar for extracting, handles symlinks well.
+          unzip /usr/local/bin/sonar-scanner-cli.zip -d /usr/local && \  # Use unzip for extracting the ZIP file.
           mv /usr/local/sonar-scanner-*/ /usr/local/sonar-scanner && \  # Move the extracted folder to a standard location.
           ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner  # Create a symbolic link for easy access.
       # Check out the repository to access code.

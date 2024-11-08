@@ -2,14 +2,9 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/base:stable  # You can choose another base image if necessary
+      - image: cimg/openjdk:17  # Use a Docker image with Java 17
     steps:
       - checkout
-      - run:
-          name: Install Java
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y openjdk-17-jdk
       - run:
           name: Install SonarScanner
           command: |

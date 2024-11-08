@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:stable  # You can choose another base image if necessary
     steps:
       - checkout
       - run:
@@ -10,6 +10,14 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install -y openjdk-17-jdk
+      - run:
+          name: Install SonarScanner
+          command: |
+            # Download and unzip SonarScanner
+            wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+            unzip sonar-scanner-cli-4.8.0.2856-linux.zip
+            sudo mv sonar-scanner-4.8.0.2856-linux /opt/sonar-scanner
+            sudo ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner
       - run:
           name: Run SonarScanner
           command: |

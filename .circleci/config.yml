@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: sonarsource/sonar-scanner-cli:4.8.0  # Pre-built image with SonarScanner and Java
+      - image: sonarsource/sonar-scanner-cli:latest  # Ensure this image uses the latest with Java 17
     steps:
       - checkout
       - run:

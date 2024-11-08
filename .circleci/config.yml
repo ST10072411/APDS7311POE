@@ -1,62 +1,74 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 version: 2.1
 
-# Define jobs for the workflow.
+# Define the jobs for the pipeline.
 jobs:
+  # Job for running a basic "Hello, World!" example.
+  say-hello:
+    docker:
+      - image: cimg/base:stable  # Use a stable CircleCI image.
+    steps:
+      - checkout  # Check out the code.
+      - run:
+          name: "Say hello"
+          command: echo "Hello, World!"
+
   # Job for running a SonarQube analysis.
   sonarqube:
-    working_directory: ~/build  # Define the working directory for the job.
+    working_directory: ~/build  # Set the working directory.
     docker:
-      - image: alpine:latest  # Use Alpine Linux for a lightweight environment.
-    resource_class: small  # Specify the resource class for the job.
+      - image: alpine:latest  # Use an Alpine image for minimal environment.
+    resource_class: small  # Define the resource class.
     steps:
       # Update and upgrade the package index in the Alpine image.
       - run:
-          name: "Update and upgrade Alpine packages"
+          name: "Update and upgrade packages"
           command: |
             apk update && apk upgrade
-      # Install required tools and dependencies, including Java.
+      # Install Java and required tools.
       - run:
-          name: "Install necessary tools and Java"
+          name: "Install tools and Java"
           command: |
-            apk --no-cache add --update openssh git curl nodejs npm unzip openjdk17-jre bash  # Install Java JRE and bash.
-            export JAVA_HOME=/usr/lib/jvm/default-jvm  # Set JAVA_HOME to the installed JRE.
-            export PATH="$JAVA_HOME/bin:$PATH"  # Add JAVA_HOME to PATH.
+            apk --no-cache add --update openssh git curl nodejs npm unzip openjdk17-jre bash
+            export JAVA_HOME=/usr/lib/jvm/default-jvm
+            export PATH="$JAVA_HOME/bin:$PATH"
             echo "JAVA_HOME is set to $JAVA_HOME"
             echo "PATH is set to $PATH"
-            java -version  # Verify Java installation.
-      # Download and extract the SonarQube scanner using unzip.
+            java -version
+      # Download and install SonarQube scanner.
       - run:
-          name: "Download and extract SonarQube scanner"
+          name: "Download and install SonarQube scanner"
           command: |
-            set -e  # Exit script if any command fails.
             wget -O /usr/local/bin/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
             unzip /usr/local/bin/sonar-scanner-cli.zip -d /usr/local
             mv /usr/local/sonar-scanner-*/ /usr/local/sonar-scanner
-            chmod +x /usr/local/sonar-scanner/bin/sonar-scanner  # Ensure the scanner script is executable.
-            ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner  # Create a symbolic link for easy command access.
-            # Remove embedded JRE to force using the system JRE.
-            rm -rf /usr/local/sonar-scanner/jre
-      # Run the SonarQube analysis with a bash script.
+            chmod +x /usr/local/sonar-scanner/bin/sonar-scanner
+            ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner
+            rm -rf /usr/local/sonar-scanner/jre  # Remove embedded JRE.
+      # Run SonarQube analysis.
       - run:
           name: "Run SonarQube analysis"
           command: |
-            set -e  # Exit script if any command fails.
-            # Write the sonar-scanner command to a script to ensure proper environment usage.
-            echo "export JAVA_HOME=/usr/lib/jvm/default-jvm" > run-sonar.sh
-            echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> run-sonar.sh
-            echo "java -version" >> run-sonar.sh
-            echo "SONAR_BRANCH=\${CIRCLE_BRANCH:-master}" >> run-sonar.sh
-            echo "echo 'Sonar branch value is: \$SONAR_BRANCH'" >> run-sonar.sh
-            echo "sonar-scanner \\" >> run-sonar.sh
-            echo "-Dsonar.projectKey=\$SONAR_PROJECT_KEY \\" >> run-sonar.sh
-            echo "-Dsonar.organization=\$SONAR_ORG \\" >> run-sonar.sh
-            echo "-Dsonar.projectName='APDS7311_FinalPOE' \\" >> run-sonar.sh
-            echo "-Dsonar.projectVersion='1.0' \\" >> run-sonar.sh
-            echo "-Dsonar.sources='backend' \\" >> run-sonar.sh
-            echo "-Dsonar.host.url='https://sonarcloud.io' \\" >> run-sonar.sh
-            echo "-Dsonar.login=\$SONAR_TOKEN \\" >> run-sonar.sh
-            echo "-Dsonar.branch.name=\$SONAR_BRANCH \\" >> run-sonar.sh
-            echo "-Dsonar.exclusions='**/android/**,**/ios/**'" >> run-sonar.sh
-            chmod +x run-sonar.sh  # Make the script executable.
-            bash run-sonar.sh  # Run the script.
+            export JAVA_HOME=/usr/lib/jvm/default-jvm
+            export PATH="$JAVA_HOME/bin:$PATH"
+            java -version
+            SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
+            echo "Sonar branch value is: $SONAR_BRANCH"
+            sonar-scanner \
+              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
+              -Dsonar.organization="$SONAR_ORG" \
+              -Dsonar.projectName="APDS7311_FinalPOE" \
+              -Dsonar.projectVersion="1.0" \
+              -Dsonar.sources="backend" \
+              -Dsonar.host.url="https://sonarcloud.io" \
+              -Dsonar.login="$SONAR_TOKEN" \
+              -Dsonar.branch.name="$SONAR_BRANCH" \
+              -Dsonar.exclusions="**/android/**,**/ios/**"
+
+# Define the workflow that orchestrates the jobs.
+workflows:
+  version: 2  # Specify the version of the workflow.
+  main-workflow:
+    jobs:
+      - say-hello  # Run the say-hello job first.
+      - sonarqube  # Run the SonarQube job.

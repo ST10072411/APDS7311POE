@@ -1,7 +1,7 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 version: 2.1
 
-# Define jobs that will be used in the workflow.
+# Define jobs for the workflow.
 jobs:
   # Job for running a SonarQube analysis.
   sonarqube:
@@ -15,11 +15,11 @@ jobs:
           name: "Update and upgrade Alpine packages"
           command: |
             apk update && apk upgrade
-      # Install required tools and dependencies, including unzip.
+      # Install required tools and dependencies, including Java.
       - run:
-          name: "Install necessary tools"
+          name: "Install necessary tools and Java"
           command: |
-            apk --no-cache add --update openssh git curl nodejs npm unzip
+            apk --no-cache add --update openssh git curl nodejs npm unzip openjdk17-jre  # Install Java JRE.
       # Download and extract the SonarQube scanner using unzip.
       - run:
           name: "Download and extract SonarQube scanner"

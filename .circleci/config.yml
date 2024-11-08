@@ -1,68 +1,70 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
-# Reference: https://circleci.com/docs/configuration-reference
 version: 2.1
 
 # Define jobs that will be used in the workflow.
 jobs:
-  # Job to print "Hello, World!" for basic testing.
-  say-hello:
-    docker:
-      # Use the cimg/base image for compatibility and a basic environment.
-      - image: cimg/base:stable
-    steps:
-      # Step to check out the repository.
-      - checkout
-      # Run step to display a message.
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
   # Job for running a SonarQube analysis.
   sonarqube:
-    working_directory: ~/build  # Define the working directory.
+    working_directory: ~/build  # Define the working directory for the job.
     docker:
-      # Use Alpine Linux for a minimal and efficient environment.
-      - image: alpine:latest
+      - image: alpine:latest  # Use Alpine Linux for a lightweight environment.
     resource_class: small  # Specify the resource class for the job.
     steps:
       # Update and upgrade the package index in the Alpine image.
-      - run: apk update
-      - run: apk upgrade
+      - run:
+          name: "Update and upgrade Alpine packages"
+          command: |
+            apk update && apk upgrade
       # Install required tools and dependencies, including unzip.
-      - run: apk --no-cache add --update openssh git curl nodejs npm unzip
+      - run:
+          name: "Install necessary tools"
+          command: |
+            apk --no-cache add --update openssh git curl nodejs npm unzip
       # Download and extract the SonarQube scanner using unzip.
-      - run: |
-          wget -O /usr/local/bin/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip && \
-          unzip /usr/local/bin/sonar-scanner-cli.zip -d /usr/local && \  # Use unzip for extracting the ZIP file.
-          mv /usr/local/sonar-scanner-*/ /usr/local/sonar-scanner && \  # Move the extracted folder to a standard location.
-          ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner  # Create a symbolic link for easy access.
-      # Check out the repository to access code.
+      - run:
+          name: "Download and extract SonarQube scanner"
+          command: |
+            set -e  # Exit script if any command fails.
+            wget -O /usr/local/bin/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+            unzip /usr/local/bin/sonar-scanner-cli.zip -d /usr/local
+            mv /usr/local/sonar-scanner-*/ /usr/local/sonar-scanner
+            chmod +x /usr/local/sonar-scanner/bin/sonar-scanner  # Ensure the scanner script is executable.
+            ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner  # Create a symbolic link for easy command access.
+      # Debug step to verify that the sonar-scanner command is available.
+      - run:
+          name: "Verify sonar-scanner installation"
+          command: which sonar-scanner
+      # Check out the repository to access the code for analysis.
       - checkout
-      # List all files to verify the structure after the code checkout.
-      - run: find .
-      # Attach the workspace, allowing data to be shared between jobs.
+      # List all files to verify the directory structure after checkout.
+      - run:
+          name: "List project files"
+          command: find .
+      # Attach the workspace to share data between jobs if needed.
       - attach_workspace:
           at: ~/workspace
-      # Run SonarQube analysis.
-      - run: |
-          # Determine the branch name, defaulting to 'master' if not set.
-          SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
-          echo "Sonar branch value is: $SONAR_BRANCH"
-          # Execute the SonarQube scanner with required parameters.
-          sonar-scanner \
-          -Dsonar.projectKey="$SONAR_PROJECT_KEY" \  # Project key for SonarQube.
-          -Dsonar.organization="$SONAR_ORG" \  # Organization key for SonarQube.
-          -Dsonar.projectName="APDS7311_FinalPOE" \  # Name of the project.
-          -Dsonar.projectVersion="1.0" \  # Version of the project.
-          -Dsonar.sources="backend" \  # Directory containing the source code.
-          -Dsonar.host.url="https://sonarcloud.io" \  # URL of the SonarQube server.
-          -Dsonar.login="$SONAR_TOKEN" \  # Token for authentication with SonarQube.
-          -Dsonar.branch.name="$SONAR_BRANCH" \  # Specify the branch name.
-          -Dsonar.exclusions="**/android/**,**/ios/**"  # Exclusions to skip certain directories.
+      # Run the SonarQube analysis.
+      - run:
+          name: "Run SonarQube analysis"
+          command: |
+            set -e  # Exit script if any command fails.
+            # Determine the branch name, defaulting to 'master' if not set.
+            SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
+            echo "Sonar branch value is: $SONAR_BRANCH"
+            # Execute the SonarQube scanner with the required parameters.
+            sonar-scanner \
+            -Dsonar.projectKey="$SONAR_PROJECT_KEY" \  # The project key in SonarQube.
+            -Dsonar.organization="$SONAR_ORG" \  # The organization key in SonarQube.
+            -Dsonar.projectName="APDS7311_FinalPOE" \  # The name of the project.
+            -Dsonar.projectVersion="1.0" \  # The version of the project.
+            -Dsonar.sources="backend" \  # Directory containing the source code.
+            -Dsonar.host.url="https://sonarcloud.io" \  # The URL of the SonarQube server.
+            -Dsonar.login="$SONAR_TOKEN" \  # The token for authentication with SonarQube.
+            -Dsonar.branch.name="$SONAR_BRANCH" \  # The branch name for analysis.
+            -Dsonar.exclusions="**/android/**,**/ios/**"  # Exclude specific directories from analysis.
 
 # Define workflows to control the order of job execution.
 workflows:
-  say-hello-workflow:
+  main-workflow:
     jobs:
-      - say-hello  # Run the say-hello job.
-      - sonarqube  # Run the SonarQube job after say-hello.
+      - sonarqube  # Run the SonarQube job.

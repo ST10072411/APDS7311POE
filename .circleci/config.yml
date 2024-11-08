@@ -32,18 +32,11 @@ jobs:
           name: "Install additional tools"
           command: |
             apk --no-cache add --update openssh git curl nodejs npm unzip bash
-      # Verify Java path.
-      - run:
-          name: "Verify Java Path"
-          command: |
-            which java
-            JAVA_PATH=$(readlink -f $(which java))
-            echo "Java is installed at: $JAVA_PATH"
       # Set JAVA_HOME based on the verified Java path.
       - run:
           name: "Set JAVA_HOME"
           command: |
-            export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+            export JAVA_HOME=/opt/openjdk-17
             export PATH="$JAVA_HOME/bin:$PATH"
             echo "JAVA_HOME is set to $JAVA_HOME"
             echo "Updated PATH is set to $PATH"
@@ -62,7 +55,7 @@ jobs:
       - run:
           name: "Run SonarQube analysis"
           command: |
-            export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+            export JAVA_HOME=/opt/openjdk-17
             export PATH="$JAVA_HOME/bin:$PATH"
             echo "JAVA_HOME is set to $JAVA_HOME"
             echo "PATH is set to $PATH"

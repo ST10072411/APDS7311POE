@@ -37,6 +37,11 @@ jobs:
             ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner  # Create a symbolic link for easy command access.
             # Remove embedded JRE to force using the system JRE.
             rm -rf /usr/local/sonar-scanner/jre
+      # Modify the sonar-scanner script to explicitly use JAVA_HOME.
+      - run:
+          name: "Modify sonar-scanner to use JAVA_HOME"
+          command: |
+            sed -i 's|^exec java|exec $JAVA_HOME/bin/java|' /usr/local/sonar-scanner/bin/sonar-scanner
       # Debug step to verify that the sonar-scanner command is available.
       - run:
           name: "Verify sonar-scanner installation"

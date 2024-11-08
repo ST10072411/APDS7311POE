@@ -1,0 +1,188 @@
+/* EmployeeDashboard.css */
+
+/* Container styling */
+.employee-dashboard-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2c2c2c; /* Dark background */
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Darker shadow */
+    color: #fff; /* Light text */
+  }
+
+  /* Title and greeting */s
+  .dashboard-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .greeting {
+    font-size: 1.5em;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  /* Action buttons for employee actions */
+  .employee-actions {
+    margin-bottom: 20px;
+  }
+  
+  .action-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .action-btn:hover {
+    background-color: #45a049;
+  }
+  
+  /* Employee details section */
+  .employee-details {
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .employee-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .employee-detail {
+    margin-bottom: 10px;
+    font-size: 1em;
+  }
+  
+  /* Recent tasks table */
+  .recent-tasks {
+    margin-top: 30px;
+  }
+  
+  .recent-tasks table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .recent-tasks th, .recent-tasks td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .recent-tasks th {
+    background-color: #f2f2f2;
+  }
+  
+  /* Task action buttons */
+  .view-details-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .view-details-btn:hover {
+    background-color: #0056b3;
+  }
+  
+
+
+  /* Overlay styling */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it appears above other elements */
+  }
+  
+  .overlay-content {
+    background-color: #2c2c2c;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  .overlay h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .verification-form .input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    margin: 0 auto
+  }
+  
+  .verification-form input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .verification-form button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    margin-top: -5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .overlay-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .submit-btn, .reject-btn {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 30%;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .reject-btn {
+    background-color: #dc3545;
+    padding: 10px;
+    width: 30%;
+  }
+  
+  .reject-btn:hover {
+    background-color: #c82333;
+  }
+  

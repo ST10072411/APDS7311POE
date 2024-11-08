@@ -2,9 +2,14 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/openjdk:17  # Use a Docker image with Java 17
+      - image: circleci/python:3.9  # Use a base image that is available
     steps:
       - checkout
+      - run:
+          name: Install Java 17
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openjdk-17-jdk
       - run:
           name: Install SonarScanner
           command: |

@@ -68,8 +68,12 @@ const Login: React.FC = () => {
           console.error("Failed to save token in localStorage.");
         }
   
-        // Optionally navigate to another page
-        navigate("/");
+        // Check if the user is an employee and navigate accordingly
+        if (result.userType === 'employee') {
+          navigate("/employeedashboard"); // Redirect to Employee Dashboard
+        } else {
+          navigate("/"); // Redirect to home for customers
+        }
       } else {
         const error = await response.json();
         console.error("Login failed:", error.message || "Unknown error");

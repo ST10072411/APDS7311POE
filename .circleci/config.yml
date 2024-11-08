@@ -19,7 +19,7 @@ jobs:
       - run:
           name: "Install necessary tools and Java"
           command: |
-            apk --no-cache add --update openssh git curl nodejs npm unzip openjdk17-jre  # Install Java JRE.
+            apk --no-cache add --update openssh git curl nodejs npm unzip openjdk17-jre bash  # Install Java JRE and bash.
             export JAVA_HOME=/usr/lib/jvm/default-jvm  # Set JAVA_HOME to the installed JRE.
             export PATH="$JAVA_HOME/bin:$PATH"  # Add JAVA_HOME to PATH.
             echo "JAVA_HOME is set to $JAVA_HOME"
@@ -37,44 +37,26 @@ jobs:
             ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner  # Create a symbolic link for easy command access.
             # Remove embedded JRE to force using the system JRE.
             rm -rf /usr/local/sonar-scanner/jre
-      # Debug step to ensure the environment variables are used correctly.
-      - run:
-          name: "Verify JAVA_HOME usage in script"
-          command: |
-            export JAVA_HOME=/usr/lib/jvm/default-jvm
-            export PATH="$JAVA_HOME/bin:$PATH"
-            echo "JAVA_HOME is set to $JAVA_HOME"
-            echo "PATH is set to $PATH"
-            java -version
-      # Check out the repository to access the code for analysis.
-      - checkout
-      # Run the SonarQube analysis with an explicit JAVA_HOME set.
+      # Run the SonarQube analysis with a bash script.
       - run:
           name: "Run SonarQube analysis"
           command: |
             set -e  # Exit script if any command fails.
-            export JAVA_HOME=/usr/lib/jvm/default-jvm
-            export PATH="$JAVA_HOME/bin:$PATH"
-            echo "JAVA_HOME is set to $JAVA_HOME"
-            echo "PATH is set to $PATH"
-            java -version
-            # Determine the branch name, defaulting to 'master' if not set.
-            SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
-            echo "Sonar branch value is: $SONAR_BRANCH"
-            # Explicitly use JAVA_HOME in the sonar-scanner invocation.
-            JAVA_HOME=$JAVA_HOME sonar-scanner \
-            -Dsonar.projectKey="$SONAR_PROJECT_KEY" \  # The project key in SonarQube.
-            -Dsonar.organization="$SONAR_ORG" \  # The organization key in SonarQube.
-            -Dsonar.projectName="APDS7311_FinalPOE" \  # The name of the project.
-            -Dsonar.projectVersion="1.0" \  # The version of the project.
-            -Dsonar.sources="backend" \  # Directory containing the source code.
-            -Dsonar.host.url="https://sonarcloud.io" \  # The URL of the SonarQube server.
-            -Dsonar.login="$SONAR_TOKEN" \  # The token for authentication with SonarQube.
-            -Dsonar.branch.name="$SONAR_BRANCH" \  # The branch name for analysis.
-            -Dsonar.exclusions="**/android/**,**/ios/**"  # Exclude specific directories from analysis.
-
-# Define workflows to control the order of job execution.
-workflows:
-  main-workflow:
-    jobs:
-      - sonarqube  # Run the SonarQube job.
+            # Write the sonar-scanner command to a script to ensure proper environment usage.
+            echo "export JAVA_HOME=/usr/lib/jvm/default-jvm" > run-sonar.sh
+            echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> run-sonar.sh
+            echo "java -version" >> run-sonar.sh
+            echo "SONAR_BRANCH=\${CIRCLE_BRANCH:-master}" >> run-sonar.sh
+            echo "echo 'Sonar branch value is: \$SONAR_BRANCH'" >> run-sonar.sh
+            echo "sonar-scanner \\" >> run-sonar.sh
+            echo "-Dsonar.projectKey=\$SONAR_PROJECT_KEY \\" >> run-sonar.sh
+            echo "-Dsonar.organization=\$SONAR_ORG \\" >> run-sonar.sh
+            echo "-Dsonar.projectName='APDS7311_FinalPOE' \\" >> run-sonar.sh
+            echo "-Dsonar.projectVersion='1.0' \\" >> run-sonar.sh
+            echo "-Dsonar.sources='backend' \\" >> run-sonar.sh
+            echo "-Dsonar.host.url='https://sonarcloud.io' \\" >> run-sonar.sh
+            echo "-Dsonar.login=\$SONAR_TOKEN \\" >> run-sonar.sh
+            echo "-Dsonar.branch.name=\$SONAR_BRANCH \\" >> run-sonar.sh
+            echo "-Dsonar.exclusions='**/android/**,**/ios/**'" >> run-sonar.sh
+            chmod +x run-sonar.sh  # Make the script executable.
+            bash run-sonar.sh  # Run the script.

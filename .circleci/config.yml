@@ -13,53 +13,19 @@ jobs:
           name: "Say hello"
           command: echo "Hello, World!"
 
-  # Job for running a SonarQube analysis.
+  # Job for running a SonarQube analysis with a pre-built Docker image.
   sonarqube:
     working_directory: ~/build  # Set the working directory.
     docker:
-      - image: openjdk:17-jdk-alpine  # Use OpenJDK with Java 17 directly.
+      - image: sonarsource/sonar-scanner-cli:latest  # Use the SonarQube scanner image.
     resource_class: small  # Define the resource class.
     steps:
       # Check out the code.
       - checkout
-      # Update and upgrade the package index in the Alpine image.
-      - run:
-          name: "Update and upgrade packages"
-          command: |
-            apk update && apk upgrade
-      # Install additional tools.
-      - run:
-          name: "Install additional tools"
-          command: |
-            apk --no-cache add --update openssh git curl nodejs npm unzip bash
-      # Set JAVA_HOME based on the verified Java path.
-      - run:
-          name: "Set JAVA_HOME"
-          command: |
-            export JAVA_HOME=/opt/openjdk-17
-            export PATH="$JAVA_HOME/bin:$PATH"
-            echo "JAVA_HOME is set to $JAVA_HOME"
-            echo "Updated PATH is set to $PATH"
-            java -version  # Verify Java is accessible
-      # Download and install SonarQube scanner.
-      - run:
-          name: "Download and install SonarQube scanner"
-          command: |
-            wget -O /usr/local/bin/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-            unzip /usr/local/bin/sonar-scanner-cli.zip -d /usr/local
-            mv /usr/local/sonar-scanner-*/ /usr/local/sonar-scanner
-            chmod +x /usr/local/sonar-scanner/bin/sonar-scanner
-            ln -s /usr/local/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner
-            rm -rf /usr/local/sonar-scanner/jre  # Remove embedded JRE if needed.
       # Run SonarQube analysis.
       - run:
           name: "Run SonarQube analysis"
           command: |
-            export JAVA_HOME=/opt/openjdk-17
-            export PATH="$JAVA_HOME/bin:$PATH"
-            echo "JAVA_HOME is set to $JAVA_HOME"
-            echo "PATH is set to $PATH"
-            java -version
             SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
             echo "Sonar branch value is: $SONAR_BRANCH"
             sonar-scanner \

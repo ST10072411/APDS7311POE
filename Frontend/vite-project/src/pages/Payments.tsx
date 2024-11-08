@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../components/css/payments.css';
 
 const Payments: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -69,9 +70,9 @@ const Payments: React.FC = () => {
   };
 
   return (
-    <div className="payments-container">
-      <h1>Make a Payment</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="payment-container">
+      <h1 style={{margin: '0 auto'}}>Make a Payment</h1>
+      <form className="form-container" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="recipientName">Recipient's Name:</label>
           <input

@@ -31,7 +31,7 @@ const EmployeeDashboard: React.FC = () => {
   };
 
   return (
-    <div className="employee-dashboard-container">
+    <div className="employee-dashboard-container" style={{height: '70vh', overflowY: 'hidden'}}>
       <h1 className="dashboard-title">Employee Dashboard</h1>
 
       {/* Table with Entries */}

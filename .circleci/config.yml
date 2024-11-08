@@ -20,14 +20,11 @@ jobs:
           name: "Install necessary tools and Java"
           command: |
             apk --no-cache add --update openssh git curl nodejs npm unzip openjdk17-jre  # Install Java JRE.
-      # Set JAVA_HOME and add it to PATH.
-      - run:
-          name: "Set JAVA_HOME"
-          command: |
-            export JAVA_HOME=/usr/lib/jvm/default-jvm  # Set JAVA_HOME to the default JRE location.
-            export PATH="$JAVA_HOME/bin:$PATH"  # Add JAVA_HOME to the PATH.
+            export JAVA_HOME=/usr/lib/jvm/default-jvm  # Set JAVA_HOME to the installed JRE.
+            export PATH="$JAVA_HOME/bin:$PATH"  # Add JAVA_HOME to PATH.
             echo "JAVA_HOME is set to $JAVA_HOME"
             echo "PATH is set to $PATH"
+            java -version  # Verify Java installation.
       # Download and extract the SonarQube scanner using unzip.
       - run:
           name: "Download and extract SonarQube scanner"
@@ -58,12 +55,17 @@ jobs:
           name: "Run SonarQube analysis"
           command: |
             set -e  # Exit script if any command fails.
+            # Set JAVA_HOME and PATH to ensure they are available in this shell.
+            export JAVA_HOME=/usr/lib/jvm/default-jvm
+            export PATH="$JAVA_HOME/bin:$PATH"
+            # Print JAVA_HOME and PATH for debugging.
+            echo "JAVA_HOME is set to $JAVA_HOME"
+            echo "PATH is set to $PATH"
+            java -version  # Confirm Java is available.
             # Determine the branch name, defaulting to 'master' if not set.
             SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
             echo "Sonar branch value is: $SONAR_BRANCH"
             # Execute the SonarQube scanner with the required parameters.
-            export JAVA_HOME=/usr/lib/jvm/default-jvm  # Set JAVA_HOME again to ensure it's in scope.
-            export PATH="$JAVA_HOME/bin:$PATH"  # Ensure JAVA_HOME is in the PATH.
             sonar-scanner \
             -Dsonar.projectKey="$SONAR_PROJECT_KEY" \  # The project key in SonarQube.
             -Dsonar.organization="$SONAR_ORG" \  # The organization key in SonarQube.

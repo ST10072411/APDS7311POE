@@ -8,8 +8,11 @@ jobs:
       - run:
           name: Run SonarScanner
           command: |
+            # Ensure the default branch is set
             SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
             echo "Sonar branch value is: $SONAR_BRANCH"
+            
+            # Run sonar-scanner with updated flags
             sonar-scanner \
               -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
               -Dsonar.organization="$SONAR_ORG" \
@@ -19,5 +22,4 @@ jobs:
               -Dsonar.host.url="https://sonarcloud.io" \
               -Dsonar.login="$SONAR_TOKEN" \
               -Dsonar.branch.name="$SONAR_BRANCH" \
-              -Dsonar.exclusions="**/android/**,**/ios/**" \
-              -Dsonar.scanner.forceEmbeddedJava=false
+              -Dsonar.exclusions="**/android/**,**/ios/**"

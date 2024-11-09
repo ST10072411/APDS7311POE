@@ -24,7 +24,7 @@ const idNumberPattern = /^\d{6,10}$/; // 6 to 10 digit ID number
 router.post('/signup', async (req, res) => {
     // Input validation
     const { username, password, confirmPassword, firstName, lastName, email, accountNumber, idNumber } = req.body;
-
+/*
     // Validate inputs
     if (!usernamePattern.test(username)) {
         return res.status(400).json({ message: 'Invalid username format' });
@@ -47,7 +47,7 @@ router.post('/signup', async (req, res) => {
     if (password !== confirmPassword) {
         return res.status(400).json({ message: 'Passwords do not match' });
     }
-
+*/
  
     const sanitizedUsername = sanitizeInput(username);
     const sanitizedFirstName = sanitizeInput(firstName);

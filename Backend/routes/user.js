@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserHere = require('../models/users');
+const EmployeeHere = require('../models/Employee');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -95,53 +96,51 @@ router.post('/signup', async (req, res) => {
 });
 
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     if (!usernamePattern.test(username)) {
         return res.status(400).json({ message: 'Invalid username format' });
     }
 
-    UserHere.findOne({ username: username })
-        .then(user => {
+    try {
+        // First, check in the users table
+        let user = await UserHere.findOne({ username: username });
+        
+        if (!user) {
+            // If not found, check in the employees table
+            user = await EmployeeHere.findOne({ EmpUsername: username });
             if (!user) {
-                console.log("User not found");
+                console.log("User not found in both tables");
                 return res.status(401).json({
                     message: "Authentication Failed!"
                 });
             }
+        }
 
-            console.log("User found:", user);
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if (err) {
-                    console.error('Error comparing passwords:', err);
-                    return res.status(500).json({
-                        message: "Error during authentication"
-                    });
-                }
+        console.log("User found:", user);
+        const isMatch = await bcrypt.compare(password, user.password || user.EmpPassword); // Compare with the appropriate password field
 
-                if (!isMatch) {
-                    console.log("Password does not match");
-                    return res.status(401).json({
-                        message: "Authentication Failed!"
-                    });
-                }
-
-                const token = jwt.sign(
-                    { username: user.username, userId: user._id },
-                    'secret_this_should_be_longer_than_it_is',
-                    { expiresIn: '1h' }
-                );
-                console.log("Authentication successful, token generated");
-                res.status(200).json({ token: token });
+        if (isMatch) {
+            console.log("Password does not match");
+            return res.status(401).json({
+                message: "Authentication Failed!"
             });
-        })
-        .catch(err => {
-            console.log("Error during authentication", err);
-            return res.status(500).json({
-                message: "Error during authentication"
-            });
+        }
+
+        const token = jwt.sign(
+            { username: user.username || user.EmpUsername, userId: user._id },
+            'secret_this_should_be_longer_than_it_is',
+            { expiresIn: '1h' }
+        );
+        console.log("Authentication successful, token generated");
+        res.status(200).json({ token: token });
+    } catch (err) {
+        console.log("Error during authentication", err);
+        return res.status(500).json({
+            message: "Error during authentication"
         });
+    }
 });
 
 

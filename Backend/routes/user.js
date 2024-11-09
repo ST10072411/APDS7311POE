@@ -121,20 +121,27 @@ router.post('/login', async (req, res) => {
         console.log("User found:", user);
         const isMatch = await bcrypt.compare(password, user.password || user.EmpPassword); // Compare with the appropriate password field
 
-        if (isMatch) {
+        if (!isMatch) {
             console.log("Password does not match");
             return res.status(401).json({
                 message: "Authentication Failed!"
             });
         }
 
+        const userType = user.EmpUsername ? 'employee' : 'customer'; // Determine userType based on the user found
         const token = jwt.sign(
-            { username: user.username || user.EmpUsername, userId: user._id },
+            { 
+                username: user.username || user.EmpUsername, 
+                userId: user._id, 
+                userType: userType // Send the correct userType
+            },
             'secret_this_should_be_longer_than_it_is',
             { expiresIn: '1h' }
         );
         console.log("Authentication successful, token generated");
-        res.status(200).json({ token: token });
+        console.log("Generated token:", token);
+        res.status(200).json({ token: token, userType: userType }); // Include userType in the response
+        
     } catch (err) {
         console.log("Error during authentication", err);
         return res.status(500).json({

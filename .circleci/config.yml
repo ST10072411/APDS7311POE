@@ -1,4 +1,4 @@
-version: 2.1  # Specify the version of the CircleCI configuration syntax.
+version: 2.1  # Specify the version of CircleCI configuration syntax.
 jobs:
   build:
     docker:
@@ -12,16 +12,16 @@ jobs:
           name: Check Current Directory
           command: pwd  # Print the present working directory to confirm where the job is being executed.
 
-      # Step to list the top-level structure of the project directory.
+      # Step to list the top-level structure of the project directory for verification.
       - run:
           name: List Top-Level Directory Structure
-          command: ls -lah  # List all files and directories at the top level with detailed information for verification.
+          command: ls -lah  # List all files and directories at the top level with detailed information.
 
       # Step to verify and list the contents of the "Backend" directory.
       - run:
           name: List Backend Directory Structure
           command: |
-            # Check if the "Backend" directory exists and list its contents if it does.
+            # Check if the "Backend" directory exists.
             if [ -d "Backend" ]; then
               echo "Backend directory exists. Listing contents:"
               ls -lah Backend  # List all files and subdirectories within the "Backend" directory.
@@ -40,15 +40,15 @@ jobs:
 
             # Execute the SonarScanner analysis with environment variables for dynamic configuration.
             sonar-scanner \
-              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \  # Use the project key stored as an environment variable.
-              -Dsonar.organization="$SONAR_ORG" \  # Use the organization key stored as an environment variable.
-              -Dsonar.projectName="$SONAR_PROJECT_NAME" \  # Use the project name stored as an environment variable.
-              -Dsonar.projectVersion="1.0" \  # Specify the project version (can be parameterized if needed).
-              -Dsonar.sources="Backend" \  # Define the source directory for analysis.
-              -Dsonar.host.url="https://sonarcloud.io" \  # The URL of the SonarCloud instance.
-              -Dsonar.login="$SONAR_TOKEN" \  # Use the authentication token stored as an environment variable.
-              -Dsonar.branch.name="$SONAR_BRANCH" \  # Set the branch name dynamically.
-              -Dsonar.exclusions="**/android/**,**/ios/**" \  # Exclude specified directories from analysis.
-              -Dsonar.c.file.suffixes=- \  # Exclude C files from analysis.
-              -Dsonar.cpp.file.suffixes=- \  # Exclude C++ files from analysis.
+              -Dsonar.projectKey="$SONAR_PROJECT_KEY"\  # Use the project key stored as an environment variable.
+              -Dsonar.organization="$SONAR_ORG"\  # Use the organization key stored as an environment variable.
+              -Dsonar.projectName="$SONAR_PROJECT_NAME"\  # Use the project name stored as an environment variable.
+              -Dsonar.projectVersion="1.0"\  # Specify the project version (can be parameterized if needed).
+              -Dsonar.sources="Backend"\  # Define the source directory for analysis.
+              -Dsonar.host.url="https://sonarcloud.io"\  # The URL of the SonarCloud instance.
+              -Dsonar.login="$SONAR_TOKEN"\  # Use the authentication token stored as an environment variable.
+              -Dsonar.branch.name="$SONAR_BRANCH"\  # Set the branch name dynamically.
+              -Dsonar.exclusions="**/android/**,**/ios/**"\  # Exclude specified directories from analysis.
+              -Dsonar.c.file.suffixes=-\  # Exclude C files from analysis.
+              -Dsonar.cpp.file.suffixes=-\  # Exclude C++ files from analysis.
               -Dsonar.objc.file.suffixes=-  # Exclude Objective-C files from analysis.

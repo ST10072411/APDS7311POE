@@ -19,6 +19,49 @@ router.get('',checkauth, (req,res) => {
 })
 
 
+//Get pending payments to display for employees
+router.get('/pending-submissions', checkauth, (req, res) => {
+    ObjectHere.find({ status: 'pending' }) // Filter by status
+        .then((payments) => {
+            res.json({
+                message: 'Pending payments found',
+                payments: payments
+            });
+        })
+        .catch((error) => {
+            res.status(500).json({ message: 'Error fetching pending payments', error: error });
+        });
+});
+
+
+// Approve or deny a payment
+router.patch('/:id', checkauth, (req, res) => {
+    const { status } = req.body; // "approved" or "denied"
+
+    if (!['approved', 'denied'].includes(status)) {
+        return res.status(400).json({ message: 'Invalid status value' });
+    }
+
+    ObjectHere.findByIdAndUpdate(
+        req.params.id,
+        { status, processedBy: req.userData.userId, processedAt: new Date() },
+        { new: true }
+    )
+        .then((payment) => {
+            if (!payment) {
+                return res.status(404).json({ message: 'Payment not found' });
+            }
+            res.json({ message: `Payment ${status}`, payment });
+        })
+        .catch((error) => {
+            res.status(500).json({ message: 'Error updating payment status', error });
+        });
+});
+
+
+
+
+
 //Upload/post function
 //router.post('',checkauth, (req,res)=>{
 router.post('',checkauth, (req,res)=>{

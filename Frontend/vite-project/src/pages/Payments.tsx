@@ -10,16 +10,71 @@ const Payments: React.FC = () => {
     swiftCode: '',
   });
 
+  const regexPatterns = {
+    recipientName: /^[a-zA-Z\s-]+$/, // Letters, spaces, and hyphens
+    recipientBank: /^[a-zA-Z0-9\s]+$/, // Alphanumeric and spaces
+    accountNumber: /^\d{10,12}$/, // 10-12 digits
+    amount: /^\d+(\.\d{1,2})?$/, // Numeric, with up to 2 decimal places
+    swiftCode: /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/, // ISO 9362 format
+  };
+
+  const validateField = (field: string, value: string) => {
+    const pattern = regexPatterns[field as keyof typeof regexPatterns];
+    if (!pattern) return true; // If no pattern exists for the field, skip validation
+    return pattern.test(value);
+  };
+
+  const [errors, setErrors] = useState({
+    recipientName: '',
+    recipientBank: '',
+    accountNumber: '',
+    amount: '',
+    swiftCode: '',
+  });
+  
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+  
+    // Validate the field and set error messages
+    const isValid = validateField(name, value);
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      [name]: isValid ? '' : `Invalid ${name.replace('recipient', '').toLowerCase()}`,
+    }));
+  
     setFormData(prevState => ({
       ...prevState,
-      [name]: value,
+      [name]: value, 
     }));
   };
+  
+
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check if all fields are valid
+    let hasError = false;
+    const newErrors: typeof errors = { recipientName: '', recipientBank: '', accountNumber: '', amount: '', swiftCode: '' };
+
+    Object.keys(formData).forEach(field => {
+      const value = formData[field as keyof typeof formData];
+      if (!validateField(field, value)) {
+        hasError = true;
+        newErrors[field as keyof typeof newErrors] = `Invalid ${field.replace('recipient', '').toLowerCase()}`;
+      }
+    });
+  
+    setErrors(newErrors);
+  
+    if (hasError) {
+      alert('Please fix validation errors before submitting.');
+      return;
+    }
 
     // Retrieve the token from localStorage
     const token = localStorage.getItem('token');
@@ -48,6 +103,7 @@ const Payments: React.FC = () => {
         const result = await response.json();
         console.log('Payment created successfully:', result);
         alert('Payment created successfully!');
+        handleCancel(); 
       } else {
         const error = await response.json();
         console.error('Error creating payment:', error.message || 'Unknown error');

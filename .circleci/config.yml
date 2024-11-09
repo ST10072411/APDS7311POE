@@ -30,8 +30,8 @@ jobs:
             echo "Sonar branch value is: $SONAR_BRANCH"
 
             sonar-scanner \
-              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
-              -Dsonar.organization="$SONAR_ORG" \
+              -Dsonar.projectKey="ST10072411_APDS7311POE" \
+              -Dsonar.organization="st10072411" \
               -Dsonar.projectName="APDS7311_FinalPOE" \
               -Dsonar.projectVersion="1.0" \
               -Dsonar.sources="Backend" \

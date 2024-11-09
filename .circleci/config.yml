@@ -28,7 +28,7 @@ jobs:
           command: |
             SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
             echo "Sonar branch value is: $SONAR_BRANCH"
-
+            
             sonar-scanner \
               -Dsonar.projectKey="ST10072411_APDS7311POE" \
               -Dsonar.organization="st10072411" \
@@ -38,4 +38,7 @@ jobs:
               -Dsonar.host.url="https://sonarcloud.io" \
               -Dsonar.login="$SONAR_TOKEN" \
               -Dsonar.branch.name="$SONAR_BRANCH" \
-              -Dsonar.exclusions="**/android/**,**/ios/**"
+              -Dsonar.exclusions="**/android/**,**/ios/**" \
+              -Dsonar.c.file.suffixes=- \
+              -Dsonar.cpp.file.suffixes=- \
+              -Dsonar.objc.file.suffixes=-

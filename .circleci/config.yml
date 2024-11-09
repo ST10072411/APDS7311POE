@@ -7,11 +7,11 @@ jobs:
       - checkout
       - run:
           name: Check Current Directory
-          command: pwd  # Print the current working directory
+          command: pwd
 
       - run:
           name: List Top-Level Directory Structure
-          command: ls -lah  # List the top-level structure to confirm file locations
+          command: ls -lah
 
       - run:
           name: List Backend Directory Structure
@@ -28,13 +28,13 @@ jobs:
           command: |
             SONAR_BRANCH="${CIRCLE_BRANCH:-master}"
             echo "Sonar branch value is: $SONAR_BRANCH"
-            
+
             sonar-scanner \
               -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
               -Dsonar.organization="$SONAR_ORG" \
               -Dsonar.projectName="APDS7311_FinalPOE" \
               -Dsonar.projectVersion="1.0" \
-              -Dsonar.sources="Backend" \  # Ensure this path matches the directory name
+              -Dsonar.sources="Backend" \
               -Dsonar.host.url="https://sonarcloud.io" \
               -Dsonar.login="$SONAR_TOKEN" \
               -Dsonar.branch.name="$SONAR_BRANCH" \

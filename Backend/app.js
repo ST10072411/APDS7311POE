@@ -31,6 +31,8 @@ const connstring =
 //Stating the route Directories
 const userRoutes = require("./routes/user")
 const paymentsRoutes = require('./routes/payment');
+const employeeRoutes = require('./routes/employee');
+
 
 mongoose.connect(connstring)
 .then(()=>
@@ -74,6 +76,8 @@ app.get('/', (req, res) => {
 //Stating the Usage of the route files
 app.use(urlprefix+'/users',userRoutes)
 app.use(urlprefix+'/payments', paymentsRoutes);
+app.use(urlprefix + '/employee', employeeRoutes);
+
 
 
 module.exports =app;

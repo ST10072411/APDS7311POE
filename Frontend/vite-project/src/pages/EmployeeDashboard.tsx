@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // To make HTTP requests
 import '../components/css/EmployeeDashboard.css';
 
-interface Entry {
-  _id: string; // MongoDB document ID
-  recieverName: string; 
-  bank: string; 
-  accNumber: number; 
-  payAmount: number; 
-  swiftCode: string; 
-  status: string; // "pending", "approved", or "denied"
-}
-
-
 const EmployeeDashboard: React.FC = () => {
+  console.log("wagwan");
+
+  interface Entry {
+    _id: string; // MongoDB document ID
+    recieverName: string; 
+    bank: string; 
+    accNumber: number; 
+    payAmount: number; 
+    swiftCode: string; 
+    status: string; // "pending", "approved", or "denied"
+  }
+
   const [entries, setEntries] = useState<Entry[]>([]); // State for payment entries
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
@@ -24,52 +25,60 @@ const EmployeeDashboard: React.FC = () => {
     // More entries...
   ];*/
 
+  useEffect(() => {
+    console.log("EmployeeDashboard component mounted");
+}, []);
+
+
 
   // Fetch pending payments on component mount
-  useEffect(() => {
+  /*useEffect(() => {
+    console.log("EmployeeDashboard mounted");
     const fetchPayments = async () => {
-      try {
-        const response = await axios.get('/api/payments/pending-submissions', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token for authentication
-          },
-        });
-        setEntries(response.data.payments); // Set the fetched entries
-      } catch (error) {
-        console.error('Error fetching pending payments:', error);
-      }
+      console.log("Fetching pending payments...");
+        try {
+            const response = await axios.get('/api/employee/pending-submissions', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token for authentication
+                },
+            });
+            console.log('Response data:', response.data);
+            setEntries(response.data.payments); // Set the fetched entries
+        } catch (error) {
+            console.error('Error fetching pending payments:', error);
+        }
     };
     fetchPayments();
-  }, []);
+}, []);*/
 
 
 
-  const handleDecision = async (status: 'approved' | 'denied') => {
-    if (!selectedEntry) return;
 
-    try {
+const handleDecision = async (status: 'approved' | 'denied') => {
+  if (!selectedEntry) return;
+
+  try {
       const response = await axios.patch(
-        `/api/payments/${selectedEntry._id}`,
-        { status },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
+          `/api/employee/update-status/${selectedEntry._id}`,
+          { status },
+          {
+              headers: {
+                  Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token for authentication
+              },
+          }
       );
 
+      // Update the UI
       setEntries((prevEntries) =>
-        prevEntries.filter((entry) => entry._id !== selectedEntry._id)
+          prevEntries.filter((entry) => entry._id !== selectedEntry._id)
       );
-
       closeOverlay();
       alert(`Payment ${status} successfully!`);
-    } catch (error) {
+  } catch (error) {
       console.error(`Error updating payment status to ${status}:`, error);
       alert('Failed to update payment status. Please try again.');
-    }
-  };
-
+  }
+};
 
 
 

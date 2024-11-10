@@ -52,8 +52,6 @@ const Payments: React.FC = () => {
   
 
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

@@ -78,6 +78,4 @@ app.use(urlprefix+'/users',userRoutes)
 app.use(urlprefix+'/payments', paymentsRoutes);
 app.use(urlprefix + '/employee', employeeRoutes);
 
-
-
 module.exports =app;

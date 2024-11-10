@@ -13,14 +13,12 @@ const sanitizeInput = (input) => {
     return input.replace(/[^a-zA-Z0-9 _-]/g, ''); // Allows alphanumeric, spaces, underscores, and hyphens
 }
 
-/*
 // Define regex patterns for validation
 const usernamePattern = /^[a-zA-Z0-9_-]{3,20}$/; // 3-20 characters, letters, numbers, underscores, hyphens
 const namePattern = /^[a-zA-Z\s-]{1,50}$/; // 1-50 characters, letters, spaces, hyphens
 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Basic email validation
 const accountNumberPattern = /^\d{10}$/; // 10-digit account number
 const idNumberPattern = /^\d{6,10}$/; // 6 to 10 digit ID number
-*/
 
 // Signup function
 router.post('/signup', async (req, res) => {

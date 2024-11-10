@@ -9,16 +9,24 @@ module.exports = router;
 
 // Request to get pending submissions
 router.get('/pending-submissions', checkAuth, async (req, res) => {
+    console.log('Route accessed');
     try {
-        // Fetch all pending payments
+        console.log('Fetching pending payments...');
         const payments = await PaymentHere.find({ status: 'pending' });
-        console.log('Pending payments:', payments);
+        console.log('Retrieved payments:', payments);
+
+        if (payments.length === 0) {
+            console.log('No pending payments found');
+        }
+
         res.status(200).json({ message: 'Pending payments retrieved', payments });
     } catch (error) {
         console.error('Error fetching pending payments:', error);
         res.status(500).json({ message: 'Error fetching pending payments', error: error.message });
     }
 });
+
+
 
 
 router.patch('/update-status/:id', checkAuth, async (req, res) => {

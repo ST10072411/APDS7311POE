@@ -3,8 +3,6 @@ import axios from 'axios'; // To make HTTP requests
 import '../components/css/EmployeeDashboard.css';
 
 const EmployeeDashboard: React.FC = () => {
-  console.log("wagwan");
-
   interface Entry {
     _id: string; // MongoDB document ID
     recieverName: string; 
@@ -19,40 +17,62 @@ const EmployeeDashboard: React.FC = () => {
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
 
- /* const entries: Entry[] = [
-    { id: 1, name: "John Doe", bank: "ABC Bank", accountNo: "123456", amount: "1000", swiftCode: "ABCD1234" },
-    { id: 2, name: "Jane Smith", bank: "XYZ Bank", accountNo: "654321", amount: "2000", swiftCode: "WXYZ5678" },
-    // More entries...
-  ];*/
 
-  useEffect(() => {
-    console.log("EmployeeDashboard component mounted");
+// Fetch pending payments on component mount
+useEffect(() => {
+  console.log("EmployeeDashboard mounted");
+
+  const verifyUser = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found, redirecting to login.');
+      alert('Please log in to access this page.');
+      window.location.href = '/login'; // Redirect to login if no token
+      return;
+    }
+
+    try {
+      // Verify the token and user type
+      const authResponse = await axios.get('/api/users/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { userType } = authResponse.data;
+      console.log(userType);
+
+      if (userType === 'customer') {
+        console.error('User is not authorized as an employee.');
+        alert('Access denied. Only employees can view this page.');
+        window.location.href = '/'; // Redirect to home or an appropriate page
+        return;
+      }
+
+      console.log('User authenticated as an employee. Proceeding to fetch data.');
+
+      // Fetch pending payments if user is verified as an employee
+      const paymentsResponse = await axios.get('/api/employee/pending-submissions', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Response data:', paymentsResponse.data);
+
+      // Safely handle null or undefined `payments` data
+      const payments = paymentsResponse.data.payments || [];
+
+      setEntries(payments);
+
+    } catch (error) {
+      console.error('Error verifying user or fetching pending payments:', error);
+      alert('Failed to authenticate or fetch data. Please log in again.');
+      window.location.href = '/login'; // Redirect if authentication fails
+    }
+  };
+
+  verifyUser();
 }, []);
-
-
-
-  // Fetch pending payments on component mount
-  /*useEffect(() => {
-    console.log("EmployeeDashboard mounted");
-    const fetchPayments = async () => {
-      console.log("Fetching pending payments...");
-        try {
-            const response = await axios.get('/api/employee/pending-submissions', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token for authentication
-                },
-            });
-            console.log('Response data:', response.data);
-            setEntries(response.data.payments); // Set the fetched entries
-        } catch (error) {
-            console.error('Error fetching pending payments:', error);
-        }
-    };
-    fetchPayments();
-}, []);*/
-
-
-
 
 const handleDecision = async (status: 'approved' | 'denied') => {
   if (!selectedEntry) return;
@@ -79,8 +99,6 @@ const handleDecision = async (status: 'approved' | 'denied') => {
       alert('Failed to update payment status. Please try again.');
   }
 };
-
-
 
   const openOverlay = (entry: any) => {
     setSelectedEntry(entry);

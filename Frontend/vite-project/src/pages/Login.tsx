@@ -84,8 +84,6 @@ const Login: React.FC = () => {
       setErrorMessage("An error occurred, please try again later.");
     }
   };
-  
-  
 
   const handleRegisterClick = () => {
     window.location.href = "/Register";

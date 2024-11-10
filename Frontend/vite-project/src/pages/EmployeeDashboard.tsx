@@ -25,51 +25,60 @@ useEffect(() => {
   const verifyUser = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('No token found, redirecting to login.');
-      alert('Please log in to access this page.');
-      window.location.href = '/login'; // Redirect to login if no token
-      return;
+        console.error('No token found, redirecting to login.');
+        alert('Please log in to access this page.');
+        window.location.href = '/login'; // Redirect to login if no token
+        return;
     }
 
     try {
-      // Verify the token and user type
-      const authResponse = await axios.get('/api/users/me', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+        // Verify the token and get user type
+        const authResponse = await fetch('https://localhost:3000/api/users/me', {
+            method: "GET", // Use GET to fetch data without modifying anything
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-      const { userType } = authResponse.data;
-      console.log(userType);
+        if (!authResponse.ok) {
+            throw new Error('Token verification failed');
+        }
 
-      if (userType === 'customer') {
-        console.error('User is not authorized as an employee.');
-        alert('Access denied. Only employees can view this page.');
-        window.location.href = '/'; // Redirect to home or an appropriate page
-        return;
-      }
+        const data = await authResponse.json();
+        const { userType } = data;
+        console.log('User type:', userType);
 
-      console.log('User authenticated as an employee. Proceeding to fetch data.');
+        if (userType === 'customer') {
+            console.error('User is not authorized as an employee.');
+            alert('Access denied. Only employees can view this page.');
+            window.location.href = '/'; // Redirect to home or an appropriate page
+            return;
+        }
 
-      // Fetch pending payments if user is verified as an employee
-      const paymentsResponse = await axios.get('/api/employee/pending-submissions', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log('Response data:', paymentsResponse.data);
+        console.log('User authenticated as an employee. Proceeding to fetch data.');
 
-      // Safely handle null or undefined `payments` data
-      const payments = paymentsResponse.data.payments || [];
+        // Fetch pending payments if user is verified as an employee
+        const paymentsResponse = await axios.get('/api/employee/pending-submissions', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
-      setEntries(payments);
+        console.log('Response data:', paymentsResponse.data);
+
+        // Safely handle null or undefined `payments` data
+        const payments = paymentsResponse.data.payments || [];
+
+        setEntries(payments);
 
     } catch (error) {
-      console.error('Error verifying user or fetching pending payments:', error);
-      alert('Failed to authenticate or fetch data. Please log in again.');
-      window.location.href = '/login'; // Redirect if authentication fails
+        console.error('Error verifying user or fetching pending payments:', error);
+        alert('Failed to authenticate or fetch data. Please log in again.');
+        window.location.href = '/login'; // Redirect if authentication fails
     }
-  };
+};
+
 
   verifyUser();
 }, []);

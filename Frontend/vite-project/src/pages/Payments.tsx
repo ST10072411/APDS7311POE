@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../components/css/payments.css';
 
+
 const Payments: React.FC = () => {
   const [formData, setFormData] = useState({
     recipientName: '',

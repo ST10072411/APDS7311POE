@@ -95,7 +95,7 @@ const Login: React.FC = () => {
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={loginUser} className="login-form">
-        <div className="input-group">
+        <div className="input-group" style={{margin: '0 auto'}}>
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -105,7 +105,7 @@ const Login: React.FC = () => {
             placeholder="Username or Account Number"
           />
         </div>
-        <div className="input-group">
+        <div className="input-group" style={{margin: '0 auto', marginTop: '5%'}}>
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -115,16 +115,16 @@ const Login: React.FC = () => {
             placeholder="Password"
           />
         </div>
-        <button type="submit" className="login-button">
+        <button type="submit" style={{margin: '0 auto', marginTop: '10%'}} className="login-button">
           Log In
         </button>
       </form>
       {errorMessage && <p className="error">{errorMessage}</p>}
       {successMessage && <p className="success">{successMessage}</p>}
 
-      <div className="register-section">
+      <div className="register-section" style={{margin: '0 auto'}}>
         <p>Don't have an account?</p>
-        <button type="button" onClick={handleRegisterClick} className="register-button">
+        <button type="button" style={{margin: '0 auto'}} onClick={handleRegisterClick} className="register-button">
           Register
         </button>
       </div>

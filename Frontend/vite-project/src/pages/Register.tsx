@@ -50,6 +50,10 @@ const Register: React.FC = () => {
       });
       const data = await response.json();
       console.log('Form submitted:', data);
+    
+      //Navigates to login
+      window.location.href = "/Login";
+      
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -139,11 +143,11 @@ const Register: React.FC = () => {
             required
           />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit" style={{margin: '0 auto', marginTop: '10px'}} className="login-button">Register</button>
       </form>
       <div className="login-section">
         <p>Already have an account?</p>
-        <button onClick={handleLogin} className="login-button">Login</button>
+        <button onClick={handleLogin} style={{margin: '0 auto'}} className="login-button">Login</button>
       </div>
     </div>
   );

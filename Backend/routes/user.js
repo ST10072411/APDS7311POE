@@ -152,24 +152,46 @@ router.post('/login', async (req, res) => {
 });
 
 
+// routes/user.js
+// routes/user.js
 router.get('/me', checkAuth, async (req, res) => {
     try {
-        const user = await UserHere.findById(req.userData.userId);
-        if (!user) {
-            console.log('User not found for ID:', req.userData.userId);
-            return res.status(404).json({ message: 'User not found' });
+        const userType = req.userData.userType;
+        let user;
+
+        if (userType === 'employee') {
+            user = await EmployeeHere.findById(req.userData.userId);
+            if (!user) {
+                return res.status(404).json({ message: 'Employee not found' });
+            }
+            res.status(200).json({
+                username: user.EmpUsername,
+                email: user.EmpEmail,
+                userType: userType,
+                // Include any other employee-specific data as needed
+            });
+        } else if (userType === 'customer') {
+            user = await UserHere.findById(req.userData.userId);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json({
+                firstName: user.firstName,
+                accountNumber: user.accountNumber,
+                accountBalance: user.accountBalance.toFixed(2),
+                username: user.username,
+                userType: userType,
+                // Include any other customer-specific data as needed
+            });
+        } else {
+            return res.status(400).json({ message: 'Invalid user type' });
         }
-        console.log('User data being sent:', user);
-        res.status(200).json({
-            firstName: user.firstName,
-            accountNumber: user.accountNumber,
-            accountBalance: user.accountBalance.toFixed(2),
-            username: user.username
-        });
     } catch (error) {
         console.error('Error in /me route:', error);
         res.status(500).json({ message: 'Error fetching user data', error: error.message });
     }
 });
+
+
 
 module.exports = router;

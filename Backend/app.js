@@ -3,6 +3,7 @@
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const rateLimit = require('express-rate-limit'); // Import rate limit
 require('dotenv').config();
 const urlprefix= '/api'
@@ -59,7 +60,6 @@ app.use((reg,res,next)=>
     next();
 });
 
-
 // Rate limiting middleware
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -77,5 +77,7 @@ app.get('/', (req, res) => {
 app.use(urlprefix+'/users',userRoutes)
 app.use(urlprefix+'/payments', paymentsRoutes);
 app.use(urlprefix + '/employee', employeeRoutes);
+app.use(cors());
+
 
 module.exports =app;

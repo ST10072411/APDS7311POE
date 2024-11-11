@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../components/css/payments.css';
 
-
 const Payments: React.FC = () => {
   const [formData, setFormData] = useState({
     recipientName: '',
@@ -32,26 +31,22 @@ const Payments: React.FC = () => {
     amount: '',
     swiftCode: '',
   });
-  
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-  
+
     // Validate the field and set error messages
     const isValid = validateField(name, value);
     setErrors(prevErrors => ({
       ...prevErrors,
       [name]: isValid ? '' : `Invalid ${name.replace('recipient', '').toLowerCase()}`,
     }));
-  
+
     setFormData(prevState => ({
       ...prevState,
-      [name]: value, 
+      [name]: value,
     }));
   };
-  
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,9 +62,9 @@ const Payments: React.FC = () => {
         newErrors[field as keyof typeof newErrors] = `Invalid ${field.replace('recipient', '').toLowerCase()}`;
       }
     });
-  
+
     setErrors(newErrors);
-  
+
     if (hasError) {
       alert('Please fix validation errors before submitting.');
       return;
@@ -79,6 +74,8 @@ const Payments: React.FC = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('No token found. Please log in.');
+      alert('Please log in to make a payment.');
+      window.location.href = '/login';
       return;
     }
 
@@ -93,7 +90,7 @@ const Payments: React.FC = () => {
           recieverName: formData.recipientName,
           bank: formData.recipientBank,
           accNumber: formData.accountNumber,
-          payAmount: formData.amount,
+          payAmount: Number(formData.amount), // Ensure amount is sent as a number
           swiftCode: formData.swiftCode,
         }),
       });
@@ -102,7 +99,7 @@ const Payments: React.FC = () => {
         const result = await response.json();
         console.log('Payment created successfully:', result);
         alert('Payment created successfully!');
-        handleCancel(); 
+        handleCancel();
       } else {
         const error = await response.json();
         console.error('Error creating payment:', error.message || 'Unknown error');
@@ -122,11 +119,18 @@ const Payments: React.FC = () => {
       amount: '',
       swiftCode: '',
     });
+    setErrors({
+      recipientName: '',
+      recipientBank: '',
+      accountNumber: '',
+      amount: '',
+      swiftCode: '',
+    });
   };
 
   return (
     <div className="payment-container">
-      <h1 style={{margin: '0 auto'}}>Make a Payment</h1>
+      <h1 style={{ margin: '0 auto' }}>Make a Payment</h1>
       <form className="form-container" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="recipientName">Recipient's Name:</label>
@@ -138,6 +142,7 @@ const Payments: React.FC = () => {
             onChange={handleChange}
             required
           />
+          {errors.recipientName && <p className="error-message">{errors.recipientName}</p>}
         </div>
         <div className="form-group">
           <label htmlFor="recipientBank">Recipient's Bank:</label>
@@ -149,6 +154,7 @@ const Payments: React.FC = () => {
             onChange={handleChange}
             required
           />
+          {errors.recipientBank && <p className="error-message">{errors.recipientBank}</p>}
         </div>
         <div className="form-group">
           <label htmlFor="accountNumber">Recipient's Account Number:</label>
@@ -160,6 +166,7 @@ const Payments: React.FC = () => {
             onChange={handleChange}
             required
           />
+          {errors.accountNumber && <p className="error-message">{errors.accountNumber}</p>}
         </div>
         <div className="form-group">
           <label htmlFor="amount">Amount to Transfer:</label>
@@ -171,6 +178,7 @@ const Payments: React.FC = () => {
             onChange={handleChange}
             required
           />
+          {errors.amount && <p className="error-message">{errors.amount}</p>}
         </div>
         <div className="form-group">
           <label htmlFor="swiftCode">SWIFT Code:</label>
@@ -182,6 +190,7 @@ const Payments: React.FC = () => {
             onChange={handleChange}
             required
           />
+          {errors.swiftCode && <p className="error-message">{errors.swiftCode}</p>}
         </div>
         <div className="spacer"></div>
         <div className="button-group">

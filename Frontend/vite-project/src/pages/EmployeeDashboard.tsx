@@ -20,92 +20,75 @@ const EmployeeDashboard: React.FC = () => {
 
 // Fetch pending payments on component mount
 useEffect(() => {
-  console.log("EmployeeDashboard mounted");
-
-  const verifyUser = async () => {
+  const fetchPendingPayments = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-        console.error('No token found, redirecting to login.');
-        alert('Please log in to access this page.');
-        window.location.href = '/login'; // Redirect to login if no token
-        return;
+      console.error('No token found, redirecting to login.');
+      window.location.href = '/login';
+      return;
     }
 
     try {
-        // Verify the token and get user type
-        const authResponse = await fetch('https://localhost:3000/api/users/me', {
-            method: "GET", // Use GET to fetch data without modifying anything
-            headers: {
-                'Content-Type': "application/json",
-                'Authorization': `Bearer ${token}`
-            }
-        });
+      // First, verify the user is an employee
+      const userResponse = await axios.get('https://localhost:3000/api/users/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (!authResponse.ok) {
-            throw new Error('Token verification failed');
-        }
+      const userData = userResponse.data;
+      if (userData.userType !== 'employee') {
+        console.error('User is not an employee');
+        alert('Access denied. Only employees can view this page.');
+        window.location.href = '/';
+        return;
+      }
 
-        const data = await authResponse.json();
-        const { userType } = data;
-        console.log('User type:', userType);
+      // Fetch pending payments
+      const paymentsResponse = await axios.get('https://localhost:3000/api/employee/pending-submissions', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (userType === 'customer') {
-            console.error('User is not authorized as an employee.');
-            alert('Access denied. Only employees can view this page.');
-            window.location.href = '/'; // Redirect to home or an appropriate page
-            return;
-        }
-
-        console.log('User authenticated as an employee. Proceeding to fetch data.');
-
-        // Fetch pending payments if user is verified as an employee
-        const paymentsResponse = await axios.get('/api/employee/pending-submissions', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        console.log('Response data:', paymentsResponse.data);
-
-        // Safely handle null or undefined `payments` data
-        const payments = paymentsResponse.data.payments || [];
-
-        setEntries(payments);
+      const payments = paymentsResponse.data.payments || [];
+      setEntries(payments);
 
     } catch (error) {
-        console.error('Error verifying user or fetching pending payments:', error);
-        alert('Failed to authenticate or fetch data. Please log in again.');
-        window.location.href = '/login'; // Redirect if authentication fails
+      console.error('Error fetching data:', error);
+      alert('Failed to fetch data. Please log in again.');
+      window.location.href = '/login';
     }
-};
+  };
 
-
-  verifyUser();
+  fetchPendingPayments();
 }, []);
+
+
 
 const handleDecision = async (status: 'approved' | 'denied') => {
   if (!selectedEntry) return;
 
   try {
-      const response = await axios.patch(
-          `/api/employee/update-status/${selectedEntry._id}`,
-          { status },
-          {
-              headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token for authentication
-              },
-          }
-      );
+    const response = await axios.patch(
+      `https://localhost:3000/api/employee/update-status/${selectedEntry._id}`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }
+    );
 
-      // Update the UI
-      setEntries((prevEntries) =>
-          prevEntries.filter((entry) => entry._id !== selectedEntry._id)
-      );
-      closeOverlay();
-      alert(`Payment ${status} successfully!`);
+    // Update the UI
+    setEntries((prevEntries) =>
+      prevEntries.filter((entry) => entry._id !== selectedEntry._id)
+    );
+    closeOverlay();
+    alert(`Payment ${status} successfully!`);
   } catch (error) {
-      console.error(`Error updating payment status to ${status}:`, error);
-      alert('Failed to update payment status. Please try again.');
+    console.error(`Error updating payment status to ${status}:`, error);
+    alert('Failed to update payment status. Please try again.');
   }
 };
 

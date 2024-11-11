@@ -6,7 +6,8 @@ const Dashboard: React.FC = () => {
     firstName: '',
     accountNumber: '',
     accountBalance: '',
-    username: ''
+    username: '',
+    userType: ''
   });
 
   useEffect(() => {
@@ -14,11 +15,12 @@ const Dashboard: React.FC = () => {
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('No token found');
+        // Redirect to login if necessary
         return;
       }
 
       try {
-        const response = await fetch('http://localhost:3000/api/users/me', {
+        const response = await fetch('https://localhost:3000/api/users/me', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -27,6 +29,13 @@ const Dashboard: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           console.log('Raw user data from server:', data);
+
+          if (data.userType !== 'customer') {
+            console.error('User is not a customer');
+            // Handle unauthorized access, e.g., redirect or display error
+            return;
+          }
+
           setUserData(data);
         } else {
           console.error('Failed to fetch user data');
@@ -38,6 +47,10 @@ const Dashboard: React.FC = () => {
 
     fetchUserData();
   }, []);
+
+  if (userData.userType !== 'customer') {
+    return <div>Unauthorized access</div>;
+  }
 
   const localPayment = () => {
     window.location.href = "/Payments"; // Navigate to the local payment page
